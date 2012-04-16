@@ -1,0 +1,10 @@
+<w:tr w:rsidR="0012426C" w:rsidRPr="001117F2" w:rsidTr="00AC1324">
+	<w:trPr>
+		<w:jc w:val="center"/>
+	</w:trPr>
+	$[tour.@wawawa.id]
+	<w:trPr>
+		<w:jc w:val="center"/>
+	</w:trPr>
+	$[tour1.@wawawa.id]
+</w:tr>

@@ -1,0 +1,29 @@
+<w:tr w:rsidR="0012426C" w:rsidRPr="001117F2" w:rsidTr="00AC1324">
+	<w:trPr>
+		<w:jc w:val="center"/>
+	</w:trPr>
+	<w:tc>
+		<w:tcPr>
+			<w:tcW w:w="2550" w:type="dxa"/>
+			<w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+		</w:tcPr>
+		<w:p w:rsidR="0012426C" w:rsidRPr="00A11FF1" w:rsidRDefault="001117F2" w:rsidP="00AC1324">
+			<w:pPr>
+				<w:jc w:val="center"/>
+				<w:rPr>
+					<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+					<w:color w:val="000000"/>
+					<w:lang w:val="en-US"/>
+				</w:rPr>
+			</w:pPr>
+			<w:r>
+				<w:rPr>
+					<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+					<w:color w:val="000000"/>
+					<w:lang w:val="en-US"/>
+				</w:rPr>
+				<w:t>$[@person]</w:t>
+			</w:r>
+		</w:p>
+	</w:tc>
+</w:tr>

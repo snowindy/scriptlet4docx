@@ -1,0 +1,88 @@
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>&lt;</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>%</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>=</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>contract</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>.</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>number</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>%</w:t>
+</w:r>
+<w:r w:rsidR="007C654C">
+	<w:rPr>
+		<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+		<w:bCs/>
+		<w:color w:val="000000"/>
+		<w:sz w:val="22"/>
+		<w:szCs w:val="22"/>
+		<w:lang w:val="en-US"/>
+	</w:rPr>
+	<w:t>&gt;</w:t>
+</w:r>

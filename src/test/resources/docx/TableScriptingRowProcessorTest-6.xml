@@ -1,0 +1,14 @@
+<w:tr w:rsidR="0012426C" w:rsidRPr="001117F2" w:rsidTr="00AC1324">
+	<w:tc>
+		<w:p w:rsidR="0012426C" w:rsidRPr="00A11FF1" w:rsidRDefault="001117F2" w:rsidP="00AC1324">
+			<w:r>
+				<w:rPr>
+					<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/>
+					<w:color w:val="000000"/>
+					<w:lang w:val="en-US"/>
+				</w:rPr>
+				<w:t>$[tour.applyFunc(tour.@wawawa.myway)]</w:t>
+			</w:r>
+		</w:p>
+	</w:tc>
+</w:tr>
