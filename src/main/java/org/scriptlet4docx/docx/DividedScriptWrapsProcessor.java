@@ -11,7 +11,7 @@ class DividedScriptWrapsProcessor {
 	static String process(String template) {
 		template = processCommon(template, dollarPattern, "${");
 		template = processCommon(template, ltPattern, "&lt;%");
-		template = processCommon(template, ltOutPattern, "&lt;%=");
+		template = processCommon(template, ltOutPattern, "&lt;%=");	
 		template = processCommon(template, gtPattern, "%&gt;");
 
 		return template;
@@ -26,7 +26,7 @@ class DividedScriptWrapsProcessor {
 
 	static String	placeholder		= UUID.randomUUID().toString();
 
-	static String ANY_TAG = "\\s*(\\s*<[^<>]*>\\s*)*\\s*";
+	static String ANY_TAG = "\\s*(<[^<>]*>\\s*)*";
 	
 	static Pattern	dollarPattern	= Pattern.compile("\\$"+ANY_TAG+"\\{", Pattern.DOTALL | Pattern.MULTILINE);
 

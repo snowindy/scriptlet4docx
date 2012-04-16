@@ -110,6 +110,7 @@ public class DocxTemplaterTest {
 
 	@Test
 	public void testProcessScriptedTemplate_brokenType2_noProcess() throws Exception {
+		System.out.println("000");
 		String template = TestUtils.readResource("/docx/DocxTemplaterTest-7.xml");
 
 		String result = DocxTemplater.processScriptedTemplate(template, params);
