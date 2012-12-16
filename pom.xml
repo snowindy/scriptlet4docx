@@ -34,4 +34,9 @@
 	</dependencies>
 	<url>https://github.com/snowindy/scriptlet4docx#readme</url>
 	<description>Fully functional groovy template scriptlets inside a docx document. No need to edit docx xml source code. All scripting can be written in MS Word. </description>
+	<scm>
+		<url>scm:git@github.com:snowindy/scriptlet4docx.git</url>
+		<connection>scm:git@github.com:snowindy/scriptlet4docx.git</connection>
+		<developerConnection>scm:git@github.com:snowindy/scriptlet4docx.git</developerConnection>
+	</scm>
 </project>
