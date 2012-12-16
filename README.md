@@ -60,3 +60,6 @@ See [GitHub download section](https://github.com/snowindy/scriptlet4docx/downloa
 
 ## Authors and Contributors
 Eugene Sapozhnikov (@snowindy).
+
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/0383d29cb8a1af9f9b8fc569d130fc25 "githalytics.com")](http://githalytics.com/snowindy/scriptlet4docx)
