@@ -39,4 +39,7 @@
 		<connection>scm:git@github.com:snowindy/scriptlet4docx.git</connection>
 		<developerConnection>scm:git@github.com:snowindy/scriptlet4docx.git</developerConnection>
 	</scm>
+	<issueManagement>
+		<url>https://github.com/snowindy/scriptlet4docx/issues</url>
+	</issueManagement>
 </project>
