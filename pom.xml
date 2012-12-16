@@ -4,7 +4,7 @@
 	<groupId>org.scriptlet4docx</groupId>
 	<artifactId>scriptlet4docx</artifactId>
 	<version>0.6</version>
-	<name>Scriptlets for docx</name>
+	<name>Scriptlet4docx</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
@@ -32,4 +32,6 @@
 			<version>[4.10,5.0)</version>
 		</dependency>
 	</dependencies>
+	<url>https://github.com/snowindy/scriptlet4docx#readme</url>
+	<description>Fully functional groovy template scriptlets inside a docx document. No need to edit docx xml source code. All scripting can be written in MS Word. </description>
 </project>
