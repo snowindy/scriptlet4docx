@@ -2,12 +2,12 @@ package org.scriptlet4docx.util.string;
 
 import java.util.List;
 
-import com.google.common.base.Splitter;
+import org.apache.commons.lang3.StringUtils;
 
 public class StringUtil {
 	public static String replaceOneByOne(String inText, String replaceStr,
 			List<String> replacements) {
-		Iterable<String> pieces = Splitter.on(replaceStr).split(inText);
+	    String[] pieces = StringUtils.splitByWholeSeparator(inText, replaceStr);
 
 		StringBuilder body = new StringBuilder(400);
 		int idx = 0;

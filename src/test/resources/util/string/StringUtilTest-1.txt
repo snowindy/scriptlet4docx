@@ -1,0 +1,9 @@
+<w:r w:rsidR="00216A98">
+	<w:rPr>
+		<w:rFonts w:ascii="Bookman Old Style" w:hAnsi="Bookman Old Style" />
+		<w:color w:val="000000" />
+		<w:sz w:val="22" />
+		<w:szCs w:val="22" />
+	</w:rPr>
+	<w:t xml:space="preserve">${contract.number}</w:t>
+</w:r>

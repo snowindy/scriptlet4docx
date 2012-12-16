@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 
 import org.scriptlet4docx.util.string.StringUtil;
+import org.scriptlet4docx.util.test.TestUtils;
 import org.junit.Test;
 
 public class StringUtilTest {
@@ -21,6 +22,15 @@ public class StringUtilTest {
 		
 		assertEquals("wswsw va d dh gh  gh g vt d ", out);
 
+	}
+	
+	@Test
+    public void testNoBreakingInitialTemplate() {
+	    String in = TestUtils.readResource("/util/string/StringUtilTest-1.txt");
+	    
+	    String out = StringUtil.replaceOneByOne(in, "4d5f4c1a-b11a-45f0-834c-e716b278e349", Arrays.asList(new String[]{}));
+	    
+	    assertEquals(in, out);
 	}
 
 }
