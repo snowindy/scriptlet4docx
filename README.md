@@ -2,9 +2,10 @@
 This project allows you to use [Groovy](http://groovy.codehaus.org/) template scriptlets inside a docx-document. Template document may be created directly from MS Word. All document styles will be preserved.
 
 ## Usage
-1. Add [Groovy](http://groovy.codehaus.org/) scriptlets to your docx-document.
-2. Generate binding parameters to fill the template: Map&lt;String, Object&gt;.
-3. Use docxTemplater.process() process method to generate result docx.
+1. Add scriptlet4docx maven dependency to your project org.scriptlet4docx:scriptlet4docx:0.6. (Will be available soon!)
+2. Add [Groovy scriptlets](http://groovy.codehaus.org/Groovy+Templates) to your docx-document.
+3. Generate binding parameters to fill the template: Map&lt;String, Object&gt;.
+4. Use docxTemplater.process() process method to generate result docx.
 
 ## Available scriptlet types
 
