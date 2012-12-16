@@ -42,4 +42,11 @@
 	<issueManagement>
 		<url>https://github.com/snowindy/scriptlet4docx/issues</url>
 	</issueManagement>
+	<licenses>
+		<license>
+	      <name>The (New) BSD License</name>
+	      <url>http://www.opensource.org/licenses/bsd-license.php</url>
+	      <distribution>repo</distribution>
+	    </license>
+	</licenses>
 </project>
