@@ -91,4 +91,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<developers>
+		<developer>
+			<email>blackorangebox@gmail.com</email>
+			<name>Eugene Polyhaev</name>
+			<url>https://github.com/snowindy</url>
+			<id>snowindy</id>
+		</developer>
+	</developers>
 </project>
