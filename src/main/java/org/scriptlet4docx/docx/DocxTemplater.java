@@ -23,8 +23,6 @@ import org.codehaus.groovy.control.CompilationFailedException;
 import org.scriptlet4docx.docx.Placeholder.ScriptWraps;
 import org.scriptlet4docx.util.xml.XMLUtils;
 
-import com.google.common.base.Splitter;
-
 public class DocxTemplater {
 
 	private File				pathToExtractedDocxFolder;
@@ -108,7 +106,8 @@ public class DocxTemplater {
 
 		String replacedScriptsTemplate = m.replaceAll(replacement);
 
-		Iterable<String> pieces = Splitter.on(replacement).split(replacedScriptsTemplate);
+		String[] pieces = StringUtils.splitByWholeSeparator(replacedScriptsTemplate, replacement);
+
 
 		List<Placeholder> tplSkeleton = new ArrayList<Placeholder>();
 
