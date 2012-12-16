@@ -40,7 +40,7 @@ Say, we have a list of person objects. Each has two fields: 'name' and 'address'
 4. Voila, the whole collection will be printed to the table.
 
 ## Live template example 
-You can check all mentioned scriptlets usage in a [demonstration template](https://github.com/downloads/snowindy/scriptlet4docx/template-example.docx).
+You can check all mentioned scriptlets usage in a [demonstration template](https://github.com/snowindy/scriptlet4docx/blob/master/documentation/examples/template-example.docx).
 
 ## Code example
 ```
