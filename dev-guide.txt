@@ -1,0 +1,5 @@
+Publishing to sonatype maven central
+mvn deploy -DperformRelease=true -Dgpg.passphrase=**** -Dgpg.keyname=<your key ID>
+
+Links
+http://jroller.com/holy/entry/releasing_a_project_to_maven  
