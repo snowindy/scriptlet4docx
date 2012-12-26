@@ -53,12 +53,6 @@ DocxTemplater docxTemplater = new DocxTemplater(new File("path_to_docx_template/
 docxTemplater.process(new File("path_to_result_docx/result.docx"), params);
 ```
 
-## Dependencies
-See [Maven pom.xml](https://github.com/snowindy/scriptlet4docx/blob/master/pom.xml) for the whole set of project dependencies.
-
-## Download 
-See [GitHub download section](https://github.com/snowindy/scriptlet4docx/downloads) for the most recent distribution archive.
-
 ## Authors and Contributors
 Eugene Sapozhnikov (@snowindy).
 
