@@ -23,6 +23,7 @@ public class DocxTemplaterTest {
         contract.put("number", "123#445");
         params.put("value", 1);
         params.put("contract", contract);
+        params.put("escapeTest", "This should be escaped: &, <, >.");
 
         List<String> personList = new ArrayList<String>();
         personList.add("vasya");
