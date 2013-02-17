@@ -145,7 +145,6 @@ public class DocxTemplater {
 		try {
 			scriptAppliedStr = String.valueOf(engine1.createTemplate(template).make(params));
 		} catch (Throwable e) {
-			System.out.println(String.format("Cannot process template: [%s].", template));
 			logger.logp(Level.SEVERE, CLASS_NAME, methodName,
 					String.format("Cannot process template: [%s].", template), e);
 			throw new RuntimeException(e);
