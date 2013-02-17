@@ -217,4 +217,17 @@ public class DocxTemplaterTest {
         assertTrue(resFile.length() > 0);
     }
 
+    @Test
+    public void testProcessScriptedTemplate_escapeAmpLtGt() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-11.xml");
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        
+        params.put("escapeTest", "This should be escaped: &, <, >.");
+        
+        String result = DocxTemplater.processScriptedTemplate(template, params);
+
+        assertTrue(result.contains(">This should be escaped: &amp;, &lt;, &gt;.<"));
+    }
+
 }
