@@ -21,4 +21,14 @@ public class StringUtil {
 
 		return body.toString();
 	}
+	
+	/**
+	 * Escapes only &,<,>
+	 */
+	public static String escapeSimpleSet(String inText) {
+	    inText = inText.replaceAll("&", "&amp;");
+	    inText = inText.replaceAll("<", "&lt;");
+	    inText = inText.replaceAll(">", "&gt;");
+	    return inText;
+	}
 }

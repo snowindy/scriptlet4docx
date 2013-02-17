@@ -32,5 +32,12 @@ public class StringUtilTest {
 	    
 	    assertEquals(in, out);
 	}
+	
+	@Test
+    public void testEscapeSimpleSet(){
+	    String in = "markup text <, >> & &amp;";
+
+        assertEquals("markup text &lt;, &gt;&gt; &amp; &amp;amp;", StringUtil.escapeSimpleSet(in));
+	}
 
 }
