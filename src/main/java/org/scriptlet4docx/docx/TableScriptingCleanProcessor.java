@@ -9,30 +9,29 @@ import java.util.regex.Pattern;
 import org.scriptlet4docx.util.string.StringUtil;
 import org.scriptlet4docx.util.xml.XMLUtils;
 
-
 class TableScriptingCleanProcessor {
 
-static Pattern	rowCleanPattern	= Pattern.compile("\\$\\[(.*?)\\]", Pattern.DOTALL | Pattern.MULTILINE);
-	
-	static String process(String wholeRow) {
-		Matcher m1 = rowCleanPattern.matcher(wholeRow);
+    private static Pattern rowCleanPattern = Pattern.compile("\\$\\[(.*?)\\]", Pattern.DOTALL | Pattern.MULTILINE);
 
-		String ph = UUID.randomUUID().toString();
+    static String process(String wholeRow) {
+        Matcher m1 = rowCleanPattern.matcher(wholeRow);
 
-		String cleanTr = null;
-		List<String> replacements = new ArrayList<String>();
+        String ph = UUID.randomUUID().toString();
 
-		while (m1.find()) {
-			String dirtyScript = m1.group(1);
-			String cleanScript = XMLUtils.getNoTagsTrimText(dirtyScript);
+        String cleanTr = null;
+        List<String> replacements = new ArrayList<String>();
 
-			replacements.add(String.format("$[%s]", cleanScript));
-		}
+        while (m1.find()) {
+            String dirtyScript = m1.group(1);
+            String cleanScript = XMLUtils.getNoTagsTrimText(dirtyScript);
 
-		cleanTr = m1.replaceAll(ph);
+            replacements.add(String.format("$[%s]", cleanScript));
+        }
 
-		cleanTr = StringUtil.replaceOneByOne(cleanTr, ph, replacements);
-		
-		return cleanTr;
-	}
+        cleanTr = m1.replaceAll(ph);
+
+        cleanTr = StringUtil.replaceOneByOne(cleanTr, ph, replacements);
+
+        return cleanTr;
+    }
 }

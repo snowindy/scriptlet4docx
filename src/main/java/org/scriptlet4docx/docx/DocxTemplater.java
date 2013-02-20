@@ -76,7 +76,7 @@ public class DocxTemplater {
         contentXmlFile = new File(pathToExtractedDocxFolder, PATH_TO_CONTENT);
     }
 
-    static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
+    private static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
             | Pattern.MULTILINE);
 
     static String processScriptedTemplate(String template, Map<String, ? extends Object> params)

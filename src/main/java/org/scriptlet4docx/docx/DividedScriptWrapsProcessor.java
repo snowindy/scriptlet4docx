@@ -24,15 +24,15 @@ class DividedScriptWrapsProcessor {
 		return res;
 	}
 
-	static String	placeholder		= UUID.randomUUID().toString();
+	private static String	placeholder		= UUID.randomUUID().toString();
 
-	static String ANY_TAG = "\\s*(<[^<>]*>\\s*)*";
+	private static String ANY_TAG = "\\s*(<[^<>]*>\\s*)*";
 	
-	static Pattern	dollarPattern	= Pattern.compile("\\$"+ANY_TAG+"\\{", Pattern.DOTALL | Pattern.MULTILINE);
+	private static Pattern	dollarPattern	= Pattern.compile("\\$"+ANY_TAG+"\\{", Pattern.DOTALL | Pattern.MULTILINE);
 
-	static Pattern	ltPattern		= Pattern.compile("&lt;"+ANY_TAG+"%", Pattern.DOTALL | Pattern.MULTILINE);
+	private static Pattern	ltPattern		= Pattern.compile("&lt;"+ANY_TAG+"%", Pattern.DOTALL | Pattern.MULTILINE);
 	
-	static Pattern	gtPattern		= Pattern.compile("%"+ANY_TAG+"\\&gt;", Pattern.DOTALL | Pattern.MULTILINE);
+	private static Pattern	gtPattern		= Pattern.compile("%"+ANY_TAG+"\\&gt;", Pattern.DOTALL | Pattern.MULTILINE);
 	
-	static Pattern	ltOutPattern		= Pattern.compile("&lt;%"+ANY_TAG+"=", Pattern.DOTALL | Pattern.MULTILINE);
+	private static Pattern	ltOutPattern		= Pattern.compile("&lt;%"+ANY_TAG+"=", Pattern.DOTALL | Pattern.MULTILINE);
 }
