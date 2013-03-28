@@ -56,6 +56,9 @@ docxTemplater.process(new File("path_to_result_docx/result.docx"), params);
 ## History
 0.6.2 fixed [issue#1](https://github.com/snowindy/scriptlet4docx/issues/1)
 
+## Licence
+Licenced under [The (New) BSD License](http://www.opensource.org/licenses/bsd-license.php).
+
 ## Authors and Contributors
 Eugene Sapozhnikov (@snowindy).
 
