@@ -48,8 +48,8 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-1.xml");
-
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
@@ -59,8 +59,8 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_brokenType1() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-2.xml");
-
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
@@ -88,7 +88,8 @@ public class DocxTemplaterTest {
     public void testProcessScriptedTemplate_tableScripting() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-6.xml");
 
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("$["));
@@ -102,7 +103,8 @@ public class DocxTemplaterTest {
     public void testProcessScriptedTemplate_brokenType2() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-3.xml");
 
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
@@ -113,7 +115,7 @@ public class DocxTemplaterTest {
     public void testProcessScriptedTemplate_brokenType2_noProcess() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-7.xml");
 
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(template.equals(result));
@@ -122,8 +124,8 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_tableScripting_iterStatus() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-8.xml");
-
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("$["));
@@ -141,8 +143,8 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_tableScripting_iterStatus_multiTable() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-4.xml");
-
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("$["));
@@ -167,7 +169,8 @@ public class DocxTemplaterTest {
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", 1);
 
-        String result = DocxTemplater.processScriptedTemplate(template, params1);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params1);
 
         assertTrue(result != null);
         assertTrue(!result.contains("else"));
@@ -179,7 +182,8 @@ public class DocxTemplaterTest {
         params1 = new HashMap<String, Object>();
         params1.put("value", 0);
 
-        result = DocxTemplater.processScriptedTemplate(template, params1);
+        template = DocxTemplater.cleanupTemplate(template);
+        result = DocxTemplater.processCleanedTemplate(template, params1);
 
         assertTrue(result != null);
         assertTrue(!result.contains("else"));
@@ -192,8 +196,8 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_spacePreserve() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-10.xml");
-
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("print"));
@@ -223,10 +227,10 @@ public class DocxTemplaterTest {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-11.xml");
 
         HashMap<String, Object> params = new HashMap<String, Object>();
-        
+
         params.put("escapeTest", "This should be escaped: &, <, >.");
-        
-        String result = DocxTemplater.processScriptedTemplate(template, params);
+        template = DocxTemplater.cleanupTemplate(template);
+        String result = DocxTemplater.processCleanedTemplate(template, params);
 
         assertTrue(result.contains(">This should be escaped: &amp;, &lt;, &gt;.<"));
     }
