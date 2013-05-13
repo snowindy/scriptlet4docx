@@ -79,4 +79,9 @@ public class TemplateFileManager {
         File preprocessed = getTmplPreprocessedFile(templateKey);
         FileUtils.writeStringToFile(preprocessed, content, "UTF-8");
     }
+
+    public void cleanup() throws IOException {
+        FileUtils.deleteDirectory(templatesDir);
+        templatesDir.mkdirs();
+    }
 }

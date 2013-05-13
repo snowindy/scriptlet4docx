@@ -19,5 +19,9 @@ public class TemplateFileManagerTest extends Assert {
         mgr.savePreProcessed(templateKey, "1");
         assertTrue(mgr.isPreProcessedTemplateExists(templateKey));
         assertEquals("1", mgr.getTemplateContent(templateKey));
+
+        mgr.cleanup();
+        assertTrue(tempDir.exists());
+        assertEquals(0, tempDir.listFiles().length);
     }
 }
