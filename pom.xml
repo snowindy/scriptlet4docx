@@ -5,6 +5,11 @@
 	<artifactId>scriptlet4docx</artifactId>
 	<version>0.7.0</version>
 	<name>Scriptlet4docx</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
