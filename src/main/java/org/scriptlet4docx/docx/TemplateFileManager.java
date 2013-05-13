@@ -63,10 +63,13 @@ public class TemplateFileManager {
         }
     }
 
+    public boolean isPreProcessedTemplateExists(String templateKey) {
+        File preprocessed = getTmplPreprocessedFile(templateKey);
+        return preprocessed.exists();
+    }
+
     public void savePreProcessed(String templateKey, String content) throws IOException {
         File preprocessed = getTmplPreprocessedFile(templateKey);
-        if (!preprocessed.exists()) {
-            FileUtils.writeStringToFile(preprocessed, content, "UTF-8");
-        }
+        FileUtils.writeStringToFile(preprocessed, content, "UTF-8");
     }
 }
