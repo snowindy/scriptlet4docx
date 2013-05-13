@@ -34,8 +34,6 @@ public class DocxTemplater {
         this.pathToDocx = pathToDocx;
     }
 
-    private boolean useCache = true;
-
     private static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
             | Pattern.MULTILINE);
 
@@ -129,11 +127,7 @@ public class DocxTemplater {
 
     private String setupTemplate() throws IOException {
         String templateKey = null;
-        if (useCache) {
-            templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
-        } else {
-            templateKey = UUID.randomUUID().toString();
-        }
+        templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
         templateFileManager.prepare(pathToDocx, templateKey);
         return templateKey;
     }
@@ -144,8 +138,11 @@ public class DocxTemplater {
 
             String template = templateFileManager.getTemplateContent(templateKey);
 
-            String cleanTemplate = cleanupTemplate(template);
-            templateFileManager.savePreProcessed(templateKey, cleanTemplate);
+            if (!templateFileManager.isPreProcessedTemplateExists(templateKey)) {
+                template = cleanupTemplate(template);
+                templateFileManager.savePreProcessed(templateKey, template);
+            }
+
             String result = processCleanedTemplate(template, params);
 
             File tmpProcessFolder = templateFileManager.createTmpProcessFolder();
@@ -182,11 +179,4 @@ public class DocxTemplater {
         }
     }
 
-    public boolean isUseCache() {
-        return useCache;
-    }
-
-    public void setUseCache(boolean useCache) {
-        this.useCache = useCache;
-    }
 }
