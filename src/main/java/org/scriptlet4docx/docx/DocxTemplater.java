@@ -5,6 +5,7 @@ import groovy.util.AntBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +29,17 @@ public class DocxTemplater {
     static final String PATH_TO_CONTENT = "word/document.xml";
 
     private File pathToDocx;
+    private InputStream templateStream;
+    private String streamTemplateKey;
     private static final TemplateFileManager templateFileManager = new TemplateFileManager();
 
     public DocxTemplater(File pathToDocx) {
         this.pathToDocx = pathToDocx;
+    }
+
+    public DocxTemplater(InputStream inputStream, String templateKey) {
+        this.templateStream = inputStream;
+        this.streamTemplateKey = templateKey;
     }
 
     private static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
@@ -127,8 +135,19 @@ public class DocxTemplater {
 
     private String setupTemplate() throws IOException {
         String templateKey = null;
-        templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
-        templateFileManager.prepare(pathToDocx, templateKey);
+        if (pathToDocx != null) {
+            // this is file-base usage
+            templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
+            templateFileManager.prepare(pathToDocx, templateKey);
+        } else {
+            // this is stream-based usage
+            templateKey = streamTemplateKey;
+            if (!templateFileManager.isTemplateFileFromStreamExists(templateKey)) {
+                templateFileManager.saveTemplateFileFromStream(templateKey, templateStream);
+                templateFileManager.prepare(templateFileManager.getTemplateFileFromStream(templateKey), templateKey);
+            }
+
+        }
         return templateKey;
     }
 

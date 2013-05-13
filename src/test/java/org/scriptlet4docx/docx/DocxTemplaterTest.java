@@ -3,6 +3,7 @@ package org.scriptlet4docx.docx;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -206,15 +207,26 @@ public class DocxTemplaterTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
-        File inFile = File.createTempFile("DocxTemplaterTest-1", ".docx");
-        inFile.deleteOnExit();
-        File resFile = new File("target/test-files/DocxTemplaterTest-1-result.docx");
+    public void testProcess_file() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result.docx");
         resFile.delete();
 
-        TestUtils.copyResourceToFile("/docx/DocxTemplaterTest-1.docx", inFile);
-
         DocxTemplater docxTemplater = new DocxTemplater(inFile);
+
+        docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
+
+    @Test
+    public void testProcess_stream() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-stream-result.docx");
+        resFile.delete();
+
+        DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k1");
 
         docxTemplater.process(resFile, params);
 
