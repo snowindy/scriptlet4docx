@@ -5,6 +5,7 @@ import groovy.util.AntBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class TemplateFileManager {
 
     static final String DOC_UNIZIP_FOLDER_NAME = "/doc-unzip";
     static final String DOC_CONTENT_PREPROCESSED = "/doc-tmpl-preprocessed.xml";
+    static final String DOC_FROM_STREAM = "/tmpl-from-stream.docx";
 
     public File getTemplateUnzipFolder(String templateKey) {
         return new File(templatesDir, templateKey + "/" + DOC_UNIZIP_FOLDER_NAME);
@@ -83,5 +85,15 @@ public class TemplateFileManager {
     public void cleanup() throws IOException {
         FileUtils.deleteDirectory(templatesDir);
         templatesDir.mkdirs();
+    }
+
+    public File getTemplateFileFromStream(String templateKey) {
+        return new File(templatesDir, templateKey + "/" + DOC_FROM_STREAM);
+    }
+
+    public void saveTemplateFileFromStream(String templateKey, InputStream iStream) throws IOException {
+        File f = getTemplateFileFromStream(templateKey);
+        FileUtils.deleteQuietly(f);
+        FileUtils.copyInputStreamToFile(iStream, f);
     }
 }

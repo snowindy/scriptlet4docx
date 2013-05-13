@@ -1,6 +1,7 @@
 package org.scriptlet4docx.docx;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +12,8 @@ public class TemplateFileManagerTest extends Assert {
         TemplateFileManager mgr = new TemplateFileManager();
         String templateKey = "k1";
         File tempDir = mgr.getTemplatesDir();
-        mgr.prepare(new File("src/test/resources/docx/DocxTemplaterTest-1.docx"), templateKey);
+        File docxFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
+        mgr.prepare(docxFile, templateKey);
         assertFalse(mgr.getTemplateContent(templateKey).isEmpty());
         assertEquals(mgr.getTemplateUnzipFolder(templateKey), new File(tempDir, templateKey + "/"
                 + TemplateFileManager.DOC_UNIZIP_FOLDER_NAME));
@@ -20,8 +22,13 @@ public class TemplateFileManagerTest extends Assert {
         assertTrue(mgr.isPreProcessedTemplateExists(templateKey));
         assertEquals("1", mgr.getTemplateContent(templateKey));
 
+        assertFalse(mgr.getTemplateFileFromStream(templateKey).exists());
+        mgr.saveTemplateFileFromStream(templateKey, new FileInputStream(docxFile));
+        assertTrue(mgr.getTemplateFileFromStream(templateKey).exists());
+
         mgr.cleanup();
         assertTrue(tempDir.exists());
         assertEquals(0, tempDir.listFiles().length);
+
     }
 }
