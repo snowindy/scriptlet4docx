@@ -4,9 +4,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import mockit.NonStrictExpectations;
+import mockit.Verifications;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -229,6 +233,32 @@ public class DocxTemplaterTest {
         DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k1");
 
         docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
+
+    @Test
+    public void testProcess_streamMultiRun() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-stream-result1.docx");
+        resFile.delete();
+
+        final DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k2");
+
+        new NonStrictExpectations(docxTemplater.templateFileManager) {
+        };
+
+        docxTemplater.process(resFile, params);
+        docxTemplater.process(resFile, params);
+
+        // testing that caching works as expected
+        new Verifications() {
+            {
+                docxTemplater.templateFileManager.saveTemplateFileFromStream(anyString, (InputStream) any);
+                times = 1;
+            }
+        };
 
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
