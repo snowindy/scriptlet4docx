@@ -55,20 +55,23 @@ public class TemplateFileManager {
         return new File(templatesDir, templateKey + "/" + DOC_CONTENT_PREPROCESSED);
     }
 
+    public boolean isPrepared(String templateKey) {
+        File dir = getTemplateUnzipFolder(templateKey);
+        return dir.exists();
+    }
+
     public void prepare(File pathToDocx, String templateKey) throws IOException {
         File dir = getTemplateUnzipFolder(templateKey);
-        if (!dir.exists()) {
-            if (pathToDocx.exists() && pathToDocx.isFile()) {
-                AntBuilder antBuilder = new AntBuilder();
-                HashMap<String, Object> params = new HashMap<String, Object>();
-                params.put("src", pathToDocx);
-                params.put("dest", dir);
-                params.put("overwrite", "true");
-                antBuilder.invokeMethod("unzip", params);
-            } else {
-                throw new FileNotFoundException(String.format("Cannot find docx template: '%s'",
-                        pathToDocx.getAbsolutePath()));
-            }
+        if (pathToDocx.exists() && pathToDocx.isFile()) {
+            AntBuilder antBuilder = new AntBuilder();
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("src", pathToDocx);
+            params.put("dest", dir);
+            params.put("overwrite", "true");
+            antBuilder.invokeMethod("unzip", params);
+        } else {
+            throw new FileNotFoundException(String.format("Cannot find docx template: '%s'",
+                    pathToDocx.getAbsolutePath()));
         }
     }
 
