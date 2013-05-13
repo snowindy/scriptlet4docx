@@ -21,6 +21,13 @@ public class TemplateFileManager {
 
     private File templatesDir;
 
+    /**
+     * For test use
+     */
+    File getTemplatesDir() {
+        return templatesDir;
+    }
+
     public String getTemplateContent(String templateKey) throws IOException {
         File contentFile = getTmplPreprocessedFile(templateKey);
 
@@ -31,8 +38,8 @@ public class TemplateFileManager {
         return FileUtils.readFileToString(contentFile, "UTF-8");
     }
 
-    private static final String DOC_UNIZIP_FOLDER_NAME = "/doc-unzip";
-    private static final String DOC_CONTENT_PREPROCESSED = "/doc-tmpl-preprocessed.xml";
+    static final String DOC_UNIZIP_FOLDER_NAME = "/doc-unzip";
+    static final String DOC_CONTENT_PREPROCESSED = "/doc-tmpl-preprocessed.xml";
 
     public File getTemplateUnzipFolder(String templateKey) {
         return new File(templatesDir, templateKey + "/" + DOC_UNIZIP_FOLDER_NAME);
