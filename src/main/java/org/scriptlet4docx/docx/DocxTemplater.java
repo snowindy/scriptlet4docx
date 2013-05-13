@@ -137,6 +137,7 @@ public class DocxTemplater {
         String templateKey = null;
         if (pathToDocx != null) {
             // this is file-base usage
+            // TODO what if hash collision? A longer hach algorythm may be needed.
             templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
             templateFileManager.prepare(pathToDocx, templateKey);
         } else {
