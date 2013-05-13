@@ -31,7 +31,7 @@ public class DocxTemplater {
     private File pathToDocx;
     private InputStream templateStream;
     private String streamTemplateKey;
-    private static final TemplateFileManager templateFileManager = new TemplateFileManager();
+    static final TemplateFileManager templateFileManager = new TemplateFileManager();
 
     public DocxTemplater(File pathToDocx) {
         this.pathToDocx = pathToDocx;
