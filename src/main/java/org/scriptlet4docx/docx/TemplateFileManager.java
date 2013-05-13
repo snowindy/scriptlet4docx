@@ -91,6 +91,10 @@ public class TemplateFileManager {
         return new File(templatesDir, templateKey + "/" + DOC_FROM_STREAM);
     }
 
+    public boolean isTemplateFileFromStreamExists(String templateKey) {
+        return getTemplateFileFromStream(templateKey).exists();
+    }
+
     public void saveTemplateFileFromStream(String templateKey, InputStream iStream) throws IOException {
         File f = getTemplateFileFromStream(templateKey);
         FileUtils.deleteQuietly(f);

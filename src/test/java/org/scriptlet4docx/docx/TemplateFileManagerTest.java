@@ -22,9 +22,9 @@ public class TemplateFileManagerTest extends Assert {
         assertTrue(mgr.isPreProcessedTemplateExists(templateKey));
         assertEquals("1", mgr.getTemplateContent(templateKey));
 
-        assertFalse(mgr.getTemplateFileFromStream(templateKey).exists());
+        assertFalse(mgr.isPreProcessedTemplateExists(templateKey));
         mgr.saveTemplateFileFromStream(templateKey, new FileInputStream(docxFile));
-        assertTrue(mgr.getTemplateFileFromStream(templateKey).exists());
+        assertTrue(mgr.isPreProcessedTemplateExists(templateKey));
 
         mgr.cleanup();
         assertTrue(tempDir.exists());
