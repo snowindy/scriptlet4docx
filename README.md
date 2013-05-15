@@ -45,6 +45,7 @@ You can check all mentioned scriptlets usage in a [demonstration template](https
 
 ## Code example
 ```
+// Setting up parameters for template processing
 HashMap<String, Object>	params = new HashMap<String, Object>();
 params.put("name", "John");
 params.put("sirname", "Smith");
