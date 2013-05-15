@@ -9,7 +9,7 @@ import org.junit.Test;
 public class TemplateFileManagerTest extends Assert {
     @Test
     public void testTemplatesDirOps() throws Exception {
-        TemplateFileManager mgr = new TemplateFileManager();
+        TemplateFileManager mgr = TemplateFileManager.getInstance();
         String templateKey = "k1";
         File tempDir = mgr.getTemplatesDir();
         File docxFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");

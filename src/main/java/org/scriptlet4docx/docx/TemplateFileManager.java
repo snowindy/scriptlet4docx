@@ -14,10 +14,16 @@ import org.apache.commons.io.FileUtils;
 
 public class TemplateFileManager {
 
-    public TemplateFileManager() {
+    private TemplateFileManager() {
         String tmpDir = System.getProperty("java.io.tmpdir");
         templatesDir = new File(tmpDir, "docx-tmpl-" + new Date().getTime() + "-" + UUID.randomUUID().toString());
         templatesDir.mkdirs();
+    }
+
+    private volatile static TemplateFileManager instance = new TemplateFileManager();
+
+    public static TemplateFileManager getInstance() {
+        return instance;
     }
 
     private File templatesDir;
