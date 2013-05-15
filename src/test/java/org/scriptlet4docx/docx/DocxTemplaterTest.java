@@ -13,6 +13,7 @@ import mockit.NonStrictExpectations;
 import mockit.Verifications;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -223,6 +224,24 @@ public class DocxTemplaterTest {
 
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
+    }
+
+    @Test
+    public void testProcess_withStreamAsOutput() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-stream-2-result.docx");
+
+        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+
+        InputStream resStream = docxTemplater.processAndReturnInputStream(params);
+
+        FileUtils.copyInputStreamToFile(resStream, resFile);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+
+        assertTrue(new File(TemplateFileManager.getInstance().getTemplatesDir(),
+                TemplateFileManager.DOC_READY_STREAM_FOLDER_NAME).listFiles().length == 0);
     }
 
     @Test

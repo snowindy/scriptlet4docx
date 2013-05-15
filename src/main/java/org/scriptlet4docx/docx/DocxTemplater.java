@@ -51,10 +51,10 @@ public class DocxTemplater {
 
     /**
      * Reads template content from input stream.<br/>
-     * TemplateKey is used for perfomance and caching. DocxTemplater caches input
-     * stream content and associates it with given TemplateKey. When multiple
-     * process() invocations occur with same templateKey, only the 1st one will
-     * actually read stream content.
+     * TemplateKey is used for perfomance and caching. DocxTemplater caches
+     * input stream content and associates it with given TemplateKey. When
+     * multiple process() invocations occur with same templateKey, only the 1st
+     * one will actually read stream content.
      * 
      * @param inputStream
      *            template binary stream to read from
@@ -186,6 +186,23 @@ public class DocxTemplater {
         return templateKey;
     }
 
+    /**
+     * Process template with the given params and return output stream as
+     * result.
+     */
+    public InputStream processAndReturnInputStream(Map<String, Object> params) {
+        File tmpResFile = templateFileManager.getUniqueOutStreamFile();
+        process(tmpResFile, params);
+        try {
+            return new DeleteOnCloseFileInputStream(tmpResFile);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Process template with the given params and save result as a docx file.
+     */
     public void process(File destDocx, Map<String, Object> params) {
         try {
             String templateKey = setupTemplate();
