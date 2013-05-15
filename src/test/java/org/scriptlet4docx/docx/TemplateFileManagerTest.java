@@ -20,7 +20,7 @@ public class TemplateFileManagerTest extends Assert {
         assertTrue(mgr.isPrepared(templateKey));
         assertFalse(mgr.getTemplateContent(templateKey).isEmpty());
         assertEquals(mgr.getTemplateUnzipFolder(templateKey), new File(tempDir, templateKey + "/"
-                + TemplateFileManager.DOC_UNIZIP_FOLDER_NAME));
+                + TemplateFileManager.DOC_UNZIP_FOLDER_NAME));
         assertFalse(mgr.isPreProcessedTemplateExists(templateKey));
         mgr.savePreProcessed(templateKey, "1");
         assertTrue(mgr.isPreProcessedTemplateExists(templateKey));

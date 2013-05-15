@@ -45,12 +45,13 @@ public class TemplateFileManager {
         return FileUtils.readFileToString(contentFile, "UTF-8");
     }
 
-    static final String DOC_UNIZIP_FOLDER_NAME = "/doc-unzip";
+    static final String DOC_UNZIP_FOLDER_NAME = "/doc-unzip";
+    static final String DOC_READY_STREAM_FOLDER_NAME = "/doc-ready-streamed";
     static final String DOC_CONTENT_PREPROCESSED = "/doc-tmpl-preprocessed.xml";
     static final String DOC_FROM_STREAM = "/tmpl-from-stream.docx";
 
     public File getTemplateUnzipFolder(String templateKey) {
-        return new File(templatesDir, templateKey + "/" + DOC_UNIZIP_FOLDER_NAME);
+        return new File(templatesDir, templateKey + "/" + DOC_UNZIP_FOLDER_NAME);
     }
 
     public File createTmpProcessFolder() {
@@ -108,5 +109,9 @@ public class TemplateFileManager {
         File f = getTemplateFileFromStream(templateKey);
         FileUtils.deleteQuietly(f);
         FileUtils.copyInputStreamToFile(iStream, f);
+    }
+
+    public File getUniqueOutStreamFile() {
+        return new File(templatesDir, DOC_READY_STREAM_FOLDER_NAME + "/" + UUID.randomUUID().toString());
     }
 }
