@@ -35,12 +35,34 @@ public class DocxTemplater {
     private static final TemplateFileManager templateFileManager = TemplateFileManager.getInstance();
 
     /**
-     * File-based constructor
+     * Reads template content from file on file system.<br/>
+     * Note that with this constructor implicit template caching occurs.<br/>
+     * This mean if you change source template after first process() invocation,
+     * result document will not reflect your changes. Use different file names
+     * if you need no-cache behavior.
+     * 
+     * @param pathToDocx
+     *            path to docx template. Would be read only once with first
+     *            process invocation.
      */
     public DocxTemplater(File pathToDocx) {
         this.pathToDocx = pathToDocx;
     }
 
+    /**
+     * Reads template content from input stream.<br/>
+     * TemplateKey is used for perfomance and caching. DocxTemplater caches input
+     * stream content and associates it with given TemplateKey. When multiple
+     * process() invocations occur with same templateKey, only the 1st one will
+     * actually read stream content.
+     * 
+     * @param inputStream
+     *            template binary stream to read from
+     * @param templateKey
+     *            unique identifier associated with given template. Should not
+     *            contain special characters like '/' and be too long. This
+     *            parameter is used for file system file path.
+     */
     public DocxTemplater(InputStream inputStream, String templateKey) {
         this.templateStream = inputStream;
         this.streamTemplateKey = templateKey;
@@ -198,15 +220,6 @@ public class DocxTemplater {
             FileUtils.deleteDirectory(tmpProcessFolder);
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public void cleanup(File file) {
-        try {
-            FileUtils.deleteDirectory(file);
-        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
