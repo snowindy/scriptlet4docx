@@ -49,7 +49,12 @@ HashMap<String, Object>	params = new HashMap<String, Object>();
 params.put("name", "John");
 params.put("sirname", "Smith");
 
+// Option 1. Template is read from file system
 DocxTemplater docxTemplater = new DocxTemplater(new File("path_to_docx_template/template.docx"));
+// Option 2. Template is read from a stream
+DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(new File("path_to_docx_template/template1.docx")), "template1");
+
+// Actual template processing
 docxTemplater.process(new File("path_to_result_docx/result.docx"), params);
 ```
 
