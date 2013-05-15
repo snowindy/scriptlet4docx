@@ -60,8 +60,9 @@ docxTemplater.process(new File("path_to_result_docx/result.docx"), params);
 
 ## History
 ###0.7.0###
-1. Added streaming feature. [issue#2](https://github.com/snowindy/scriptlet4docx/issues/2)
+1. Added streaming feature. Based on [issue#2](https://github.com/snowindy/scriptlet4docx/issues/2)
 2. Updated and simplified caching mechanism
+3. Updated API
 3. Added JavaDoc
 
 ###0.6.2###
