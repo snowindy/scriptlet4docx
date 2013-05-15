@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.scriptlet4docx.docx.Placeholder.ScriptWraps;
@@ -33,6 +34,9 @@ public class DocxTemplater {
     private String streamTemplateKey;
     static final TemplateFileManager templateFileManager = new TemplateFileManager();
 
+    /**
+     * File-based constructor
+     */
     public DocxTemplater(File pathToDocx) {
         this.pathToDocx = pathToDocx;
     }
@@ -137,15 +141,21 @@ public class DocxTemplater {
         String templateKey = null;
         if (pathToDocx != null) {
             // this is file-base usage
-            // TODO what if hash collision? A longer hach algorythm may be needed.
+            // TODO what if hash collision? A longer hach algorythm may be
+            // needed.
             templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
             templateFileManager.prepare(pathToDocx, templateKey);
         } else {
             // this is stream-based usage
-            templateKey = streamTemplateKey;
-            if (!templateFileManager.isTemplateFileFromStreamExists(templateKey)) {
-                templateFileManager.saveTemplateFileFromStream(templateKey, templateStream);
-                templateFileManager.prepare(templateFileManager.getTemplateFileFromStream(templateKey), templateKey);
+            try {
+                templateKey = streamTemplateKey;
+                if (!templateFileManager.isTemplateFileFromStreamExists(templateKey)) {
+                    templateFileManager.saveTemplateFileFromStream(templateKey, templateStream);
+                    templateFileManager
+                            .prepare(templateFileManager.getTemplateFileFromStream(templateKey), templateKey);
+                }
+            } finally {
+                IOUtils.closeQuietly(templateStream);
             }
 
         }
@@ -195,6 +205,18 @@ public class DocxTemplater {
         try {
             FileUtils.deleteDirectory(file);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Cleans up templater temporary folder.<br/>
+     * Normally should be called when application is about to end its execution.
+     */
+    public static void cleanup() {
+        try {
+            templateFileManager.cleanup();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
