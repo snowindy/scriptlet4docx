@@ -64,6 +64,9 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 ```
 
 ## History
+###0.7.1###
+1. Added ability to return InputStream as process result.
+
 ###0.7.0###
 1. Added streaming feature. Based on [issue#2](https://github.com/snowindy/scriptlet4docx/issues/2)
 2. Updated and simplified caching mechanism
