@@ -32,7 +32,7 @@ public class DocxTemplater {
     private File pathToDocx;
     private InputStream templateStream;
     private String streamTemplateKey;
-    static final TemplateFileManager templateFileManager = new TemplateFileManager();
+    private static final TemplateFileManager templateFileManager = TemplateFileManager.getInstance();
 
     /**
      * File-based constructor
@@ -141,10 +141,12 @@ public class DocxTemplater {
         String templateKey = null;
         if (pathToDocx != null) {
             // this is file-base usage
-            // TODO what if hash collision? A longer hach algorythm may be
+            // TODO what if hash collision? A longer hash algorythm may be
             // needed.
             templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
-            templateFileManager.prepare(pathToDocx, templateKey);
+            if (!templateFileManager.isPrepared(templateKey)) {
+                templateFileManager.prepare(pathToDocx, templateKey);
+            }
         } else {
             // this is stream-based usage
             try {
