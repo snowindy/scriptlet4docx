@@ -244,19 +244,34 @@ public class DocxTemplaterTest {
         File resFile = new File("target/test-files/DocxTemplaterTest-1-stream-result1.docx");
         resFile.delete();
 
-        final DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k2");
+        final InputStream stream1 = new FileInputStream(inFile);
+        final InputStream stream2 = new FileInputStream(inFile);
 
-        new NonStrictExpectations(docxTemplater.templateFileManager) {
+        final DocxTemplater docxTemplater1 = new DocxTemplater(stream1, "k2");
+        final DocxTemplater docxTemplater2 = new DocxTemplater(stream2, "k2");
+
+        new NonStrictExpectations(stream2) {
         };
 
-        docxTemplater.process(resFile, params);
-        docxTemplater.process(resFile, params);
+        docxTemplater1.process(resFile, params);
+        docxTemplater2.process(resFile, params);
 
-        // testing that caching works as expected
+        // testing that stream2 was not actuall read but was closed
         new Verifications() {
             {
-                docxTemplater.templateFileManager.saveTemplateFileFromStream(anyString, (InputStream) any);
-                times = 1;
+                stream2.read((byte[]) any);
+                times = 0;
+            }
+        };
+        new Verifications() {
+            {
+                stream2.read((byte[]) any, anyInt, anyInt);
+                times = 0;
+            }
+        };
+        new Verifications() {
+            {
+                stream2.close();
             }
         };
 
