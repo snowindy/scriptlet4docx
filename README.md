@@ -58,6 +58,7 @@ docxTemplater.process(new File("path_to_result_docx/result.docx"), params);
 1. Added streaming feature. [issue#2](https://github.com/snowindy/scriptlet4docx/issues/2)
 2. Updated and simplified caching mechanism
 3. Added JavaDoc
+
 ###0.6.2### 
 1. Fixed [issue#1](https://github.com/snowindy/scriptlet4docx/issues/1)
 
