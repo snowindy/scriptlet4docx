@@ -57,10 +57,10 @@ DocxTemplater docxTemplater = new DocxTemplater(new File("path_to_docx_template/
 DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(new File("path_to_docx_template/template1.docx")), "template1");
 
 // Actual processing
-// Option 1. Template processing with file as result
+// Option 1. Processing with file as result
 docxTemplater.process(new File("path_to_result_docx/result.docx"), params);
-// Option 2. processing with InputStream as result
-docxTemplater.processAndReturnInputStream(params);
+// Option 2. Processing with InputStream as result
+InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 ```
 
 ## History
