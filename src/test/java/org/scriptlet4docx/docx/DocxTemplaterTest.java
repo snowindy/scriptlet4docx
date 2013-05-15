@@ -12,6 +12,7 @@ import java.util.List;
 import mockit.NonStrictExpectations;
 import mockit.Verifications;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -219,6 +220,38 @@ public class DocxTemplaterTest {
         DocxTemplater docxTemplater = new DocxTemplater(inFile);
 
         docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
+
+    @Test
+    public void testProcess_fileMultiRun() throws Exception {
+        File inFile = File.createTempFile("docx-test", "docx");
+        FileUtils.copyFile(new File("src/test/resources/docx/DocxTemplaterTest-1.docx"), inFile);
+        inFile.deleteOnExit();
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result1.docx");
+        resFile.delete();
+
+        final TemplateFileManager mgr = TemplateFileManager.getInstance();
+
+        new NonStrictExpectations(mgr) {
+        };
+
+        DocxTemplater docxTemplater1 = new DocxTemplater(inFile);
+
+        docxTemplater1.process(resFile, params);
+
+        DocxTemplater docxTemplater2 = new DocxTemplater(inFile);
+
+        docxTemplater2.process(resFile, params);
+
+        new Verifications() {
+            {
+                mgr.prepare((File) any, anyString);
+                times = 1;
+            }
+        };
 
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
