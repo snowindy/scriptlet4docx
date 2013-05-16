@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ DocxTemplaterTest.class, PlaceholderTest.class, DividedScriptWrapsProcessorTest.class,
-		TableScriptingProcessorTest.class, TableScriptingRowProcessorTest.class })
-public class DocxTests {
+        TableScriptingProcessorTest.class, TableScriptingRowProcessorTest.class, TemplateFileManagerTest.class })
+public class UnitTests {
 
 }
