@@ -381,11 +381,15 @@ public class DocxTemplaterTest extends Assert {
 
         assertFalse(result.contains("space=\"preserve\">null<"));
         assertTrue(result.contains("space=\"preserve\"><"));
-
+        
+        assertFalse(result.contains("space=\"arg1\">null<"));
+        assertTrue(result.contains("space=\"arg1\"><"));
+        
         templater.setNullReplacement("UNKNOWD");
         result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result.contains("space=\"preserve\">UNKNOWD<"));
+        assertTrue(result.contains("space=\"arg1\">UNKNOWD<"));
     }
 
 }

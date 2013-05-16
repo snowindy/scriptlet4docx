@@ -6,4 +6,5 @@
 		<w:szCs w:val="22" />
 	</w:rPr>
 	<w:t xml:space="preserve">${someNullyVar}</w:t>
+	<w:t xml:space="arg1">&lt;%= someNullyVar %&gt;</w:t>
 </w:r>
