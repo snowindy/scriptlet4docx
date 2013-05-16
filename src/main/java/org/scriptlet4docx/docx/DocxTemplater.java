@@ -202,7 +202,8 @@ public class DocxTemplater {
     }
 
     /**
-     * Process template with the given params and writes result as output stream.
+     * Process template with the given params and writes result as output stream.<br/>
+     * Note that stream will be closed automatically.
      */
     public void process(OutputStream outputStream, Map<String, Object> params) {
         try {
