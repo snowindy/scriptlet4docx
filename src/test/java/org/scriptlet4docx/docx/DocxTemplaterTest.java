@@ -231,6 +231,7 @@ public class DocxTemplaterTest {
     public void testProcess_withInputStreamAsOutput() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-2-result.docx");
+        resFile.delete();
 
         DocxTemplater docxTemplater = new DocxTemplater(inFile);
 
@@ -249,6 +250,7 @@ public class DocxTemplaterTest {
     public void testProcess_withOutputStream() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-3-result.docx");
+        resFile.delete();
 
         DocxTemplater docxTemplater = new DocxTemplater(inFile);
 
