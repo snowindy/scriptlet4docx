@@ -78,8 +78,8 @@ public class DocxTemplater {
         return template;
     }
 
-    String processCleanedTemplate(String template, Map<String, ? extends Object> params)
-            throws CompilationFailedException, ClassNotFoundException, IOException {
+    String processCleanedTemplate(String template, Map<String, Object> params) throws CompilationFailedException,
+            ClassNotFoundException, IOException {
         final String methodName = "processScriptedTemplate";
 
         String replacement = UUID.randomUUID().toString();
@@ -122,6 +122,10 @@ public class DocxTemplater {
         for (Placeholder placeholder : tplSkeleton) {
             if (Placeholder.SCRIPT == placeholder.type) {
                 String cleanScriptNoWrap = XMLUtils.getNoTagsTrimText(placeholder.getScriptTextNoWrap());
+                if (placeholder.scriptWrap == ScriptWraps.DOLLAR_PRINT
+                        || placeholder.scriptWrap == ScriptWraps.SCRIPLET_PRINT) {
+                    cleanScriptNoWrap = NULL_REPLACER_REF + "(" + cleanScriptNoWrap + ")";
+                }
                 String script = placeholder.constructWithCurrentScriptWrap(cleanScriptNoWrap);
                 builder.append(script);
             } else {
@@ -130,6 +134,8 @@ public class DocxTemplater {
         }
 
         template = builder.toString();
+
+        params.put(UTIL_FUNC_HOLDER, this);
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.logp(Level.FINEST, CLASS_NAME, methodName, String.format("\ntemplate = \n%s\n", template));
@@ -202,7 +208,8 @@ public class DocxTemplater {
     }
 
     /**
-     * Process template with the given params and writes result as output stream.<br/>
+     * Process template with the given params and writes result as output
+     * stream.<br/>
      * Note that stream will be closed automatically.
      */
     public void process(OutputStream outputStream, Map<String, Object> params) {
@@ -271,6 +278,27 @@ public class DocxTemplater {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    final static String UTIL_FUNC_HOLDER = "__docxTemplaterInstance";
+    final static String NULL_REPLACER_REF = UTIL_FUNC_HOLDER + ".replaceIfNull";
+
+    @SuppressWarnings("unused")
+    private String replaceIfNull(Object o) {
+        return o == null ? nullReplacement : String.valueOf(o);
+    }
+
+    private String nullReplacement = "";
+
+    /**
+     * 
+     * @param nullReplacement
+     *            When scriptlet output is null this value take it's place.<br />
+     *            Useful when you want nothing to be printed, or custom value
+     *            like "UNKNOWN".
+     */
+    public void setNullReplacement(String nullReplacement) {
+        this.nullReplacement = nullReplacement;
     }
 
 }
