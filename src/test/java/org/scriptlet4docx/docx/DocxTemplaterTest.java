@@ -50,12 +50,11 @@ public class DocxTemplaterTest extends Assert {
 
         params.put("employeeList", employeeList);
     }
-    
 
     @Test
     public void testProcessScriptedTemplate() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-1.xml");
-        
+
         DocxTemplater templater = new DocxTemplater(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
@@ -68,7 +67,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_brokenType1() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-2.xml");
-        
+
         DocxTemplater templater = new DocxTemplater(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
@@ -352,7 +351,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
-    
+
     private File none;
 
     @Test
@@ -367,6 +366,26 @@ public class DocxTemplaterTest extends Assert {
         String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result.contains(">This should be escaped: &amp;, &lt;, &gt;.<"));
+    }
+
+    @Test
+    public void testProcessScriptedTemplate_nullsReplacement() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-12.xml");
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+
+        params.put("someNullyVar", null);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
+
+        assertFalse(result.contains("space=\"preserve\">null<"));
+        assertTrue(result.contains("space=\"preserve\"><"));
+
+        templater.setNullReplacement("UNKNOWD");
+        result = templater.processCleanedTemplate(template, params);
+
+        assertTrue(result.contains("space=\"preserve\">UNKNOWD<"));
     }
 
 }
