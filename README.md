@@ -66,6 +66,9 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 ```
 
 ## History
+###0.7.3###
+1. Added ability to specify nulls replacement for printing scriptlets. [issue#3](https://github.com/snowindy/scriptlet4docx/issues/3)
+
 ###0.7.2###
 1. Added ability to write result directly to OutputStream.
 
