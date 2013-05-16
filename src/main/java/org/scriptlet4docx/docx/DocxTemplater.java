@@ -72,13 +72,13 @@ public class DocxTemplater {
     private static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
             | Pattern.MULTILINE);
 
-    static String cleanupTemplate(String template) {
+    String cleanupTemplate(String template) {
         template = DividedScriptWrapsProcessor.process(template);
         template = TableScriptingProcessor.process(template);
         return template;
     }
 
-    static String processCleanedTemplate(String template, Map<String, ? extends Object> params)
+    String processCleanedTemplate(String template, Map<String, ? extends Object> params)
             throws CompilationFailedException, ClassNotFoundException, IOException {
         final String methodName = "processScriptedTemplate";
 

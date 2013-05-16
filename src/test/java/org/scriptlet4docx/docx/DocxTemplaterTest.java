@@ -1,7 +1,5 @@
 package org.scriptlet4docx.docx;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,13 +12,13 @@ import mockit.NonStrictExpectations;
 import mockit.Verifications;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.scriptlet4docx.util.test.TestUtils;
 
-public class DocxTemplaterTest {
+public class DocxTemplaterTest extends Assert {
 
     static HashMap<String, Object> params;
 
@@ -52,12 +50,15 @@ public class DocxTemplaterTest {
 
         params.put("employeeList", employeeList);
     }
+    
 
     @Test
     public void testProcessScriptedTemplate() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-1.xml");
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
@@ -67,8 +68,10 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_brokenType1() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-2.xml");
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
@@ -95,9 +98,9 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_tableScripting() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-6.xml");
-
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("$["));
@@ -110,9 +113,9 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_brokenType2() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-3.xml");
-
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
@@ -122,8 +125,8 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_brokenType2_noProcess() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-7.xml");
-
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(template.equals(result));
@@ -132,8 +135,9 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_tableScripting_iterStatus() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-8.xml");
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("$["));
@@ -151,8 +155,9 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_tableScripting_iterStatus_multiTable() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-4.xml");
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("$["));
@@ -176,9 +181,9 @@ public class DocxTemplaterTest {
 
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", 1);
-
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params1);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params1);
 
         assertTrue(result != null);
         assertTrue(!result.contains("else"));
@@ -190,8 +195,8 @@ public class DocxTemplaterTest {
         params1 = new HashMap<String, Object>();
         params1.put("value", 0);
 
-        template = DocxTemplater.cleanupTemplate(template);
-        result = DocxTemplater.processCleanedTemplate(template, params1);
+        template = templater.cleanupTemplate(template);
+        result = templater.processCleanedTemplate(template, params1);
 
         assertTrue(result != null);
         assertTrue(!result.contains("else"));
@@ -204,8 +209,9 @@ public class DocxTemplaterTest {
     @Test
     public void testProcessScriptedTemplate_spacePreserve() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-10.xml");
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(!result.contains("print"));
@@ -233,9 +239,9 @@ public class DocxTemplaterTest {
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-2-result.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+        DocxTemplater templater = new DocxTemplater(inFile);
 
-        InputStream resStream = docxTemplater.processAndReturnInputStream(params);
+        InputStream resStream = templater.processAndReturnInputStream(params);
 
         FileUtils.copyInputStreamToFile(resStream, resFile);
 
@@ -346,6 +352,8 @@ public class DocxTemplaterTest {
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
+    
+    private File none;
 
     @Test
     public void testProcessScriptedTemplate_escapeAmpLtGt() throws Exception {
@@ -354,8 +362,9 @@ public class DocxTemplaterTest {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         params.put("escapeTest", "This should be escaped: &, <, >.");
-        template = DocxTemplater.cleanupTemplate(template);
-        String result = DocxTemplater.processCleanedTemplate(template, params);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result.contains(">This should be escaped: &amp;, &lt;, &gt;.<"));
     }
