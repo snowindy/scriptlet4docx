@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -227,7 +228,7 @@ public class DocxTemplaterTest {
     }
 
     @Test
-    public void testProcess_withStreamAsOutput() throws Exception {
+    public void testProcess_withInputStreamAsOutput() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-2-result.docx");
 
@@ -242,6 +243,19 @@ public class DocxTemplaterTest {
 
         assertTrue(new File(TemplateFileManager.getInstance().getTemplatesDir(),
                 TemplateFileManager.DOC_READY_STREAM_FOLDER_NAME).listFiles().length == 0);
+    }
+
+    @Test
+    public void testProcess_withOutputStream() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-stream-3-result.docx");
+
+        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+
+        docxTemplater.process(new FileOutputStream(resFile), params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
     }
 
     @Test

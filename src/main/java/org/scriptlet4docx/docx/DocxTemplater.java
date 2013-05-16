@@ -6,6 +6,7 @@ import groovy.util.AntBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,6 +196,24 @@ public class DocxTemplater {
         process(tmpResFile, params);
         try {
             return new DeleteOnCloseFileInputStream(tmpResFile);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Process template with the given params and writes result as output stream.
+     */
+    public void process(OutputStream outputStream, Map<String, Object> params) {
+        try {
+            InputStream inputStream = null;
+            try {
+                inputStream = processAndReturnInputStream(params);
+                IOUtils.copy(inputStream, outputStream);
+            } finally {
+                IOUtils.closeQuietly(inputStream);
+                IOUtils.closeQuietly(outputStream);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
