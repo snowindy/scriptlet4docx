@@ -11,7 +11,7 @@ import org.scriptlet4docx.util.string.StringUtil;
 
 class TableScriptingProcessor {
 
-    private static Pattern	tablePreProcessPattern	= Pattern.compile("<w:tr\\s(?:(?!/?<w:tr\\s).)*(\\$\\[(.*?)\\]).*?</w:tr>",
+    private static Pattern	tablePreProcessPattern	= Pattern.compile("<w:tr\\s*(?:(?!/?<w:tr\\s*).)*(\\$\\[(.*?)\\]).*?</w:tr>",
 													Pattern.DOTALL | Pattern.MULTILINE);
 
 	static String process(String template) {
@@ -35,7 +35,6 @@ class TableScriptingProcessor {
 		String noScriptsText = m.replaceAll(placeholder);
 
 		String scriptInsertedText = StringUtil.replaceOneByOne(noScriptsText, placeholder, scripts);
-		;
 
 		return scriptInsertedText;
 	}

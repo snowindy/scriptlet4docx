@@ -75,4 +75,18 @@ public class TableScriptingProcessorTest {
 		assertTrue(result.contains("${bababa.id}"));
 	}
 
+	@Test
+    public void testProccess2() throws IOException {
+        String template =  TestUtils.readResource(
+                "/docx/TableScriptingProcessorTest-6.xml");
+
+        String result = TableScriptingProcessor.process(template);
+
+        assertTrue(result != null);
+        assertTrue(!result.contains("$["));
+        assertTrue(result
+                .contains("&lt;% def iterStatus=0; for ( employee in employeeList ) { iterStatus++; %&gt;"));
+        assertTrue(result.contains("${employee.address}"));
+
+    }
 }
