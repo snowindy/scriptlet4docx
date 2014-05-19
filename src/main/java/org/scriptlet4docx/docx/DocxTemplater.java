@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.control.CompilationFailedException;
+import org.scriptlet4docx.docx.Placeholder.PlaceholderType;
 import org.scriptlet4docx.docx.Placeholder.ScriptWraps;
 import org.scriptlet4docx.util.string.StringUtil;
 import org.scriptlet4docx.util.xml.XMLUtils;
@@ -90,7 +92,7 @@ public class DocxTemplater {
 
         while (m.find()) {
             String scriptText = m.group(0);
-            Placeholder ph = new Placeholder(UUID.randomUUID().toString(), scriptText, Placeholder.SCRIPT);
+            Placeholder ph = new Placeholder(UUID.randomUUID().toString(), scriptText, PlaceholderType.SCRIPT);
 
             if (ph.scriptWrap == ScriptWraps.DOLLAR_PRINT) {
                 ph.setScriptTextNoWrap(m.group(4));
@@ -103,13 +105,20 @@ public class DocxTemplater {
 
         String replacedScriptsTemplate = m.replaceAll(replacement);
 
-        String[] pieces = StringUtils.splitByWholeSeparator(replacedScriptsTemplate, replacement);
+        List<String> pieces = Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(replacedScriptsTemplate,
+                replacement));
+
+        if (pieces.size() != scripts.size() + 1) {
+            throw new IllegalStateException(String.format(
+                    "Programming bug was detected. Text pieces size does not match scripts size (%s, %s)."
+                            + " Please report this as a bug to the library author.", pieces.size(), scripts.size()));
+        }
 
         List<Placeholder> tplSkeleton = new ArrayList<Placeholder>();
 
         int i = 0;
         for (String piece : pieces) {
-            tplSkeleton.add(new Placeholder(UUID.randomUUID().toString(), piece, Placeholder.TEXT));
+            tplSkeleton.add(new Placeholder(UUID.randomUUID().toString(), piece, PlaceholderType.TEXT));
 
             if (i < scripts.size()) {
                 tplSkeleton.add(scripts.get(i));
@@ -120,7 +129,7 @@ public class DocxTemplater {
         StringBuilder builder = new StringBuilder();
 
         for (Placeholder placeholder : tplSkeleton) {
-            if (Placeholder.SCRIPT == placeholder.type) {
+            if (PlaceholderType.SCRIPT == placeholder.type) {
                 String cleanScriptNoWrap = XMLUtils.getNoTagsTrimText(placeholder.getScriptTextNoWrap());
                 if (placeholder.scriptWrap == ScriptWraps.DOLLAR_PRINT
                         || placeholder.scriptWrap == ScriptWraps.SCRIPLET_PRINT) {
@@ -155,7 +164,7 @@ public class DocxTemplater {
 
         String result = scriptAppliedStr;
         for (Placeholder placeholder : tplSkeleton) {
-            if (Placeholder.TEXT == placeholder.type) {
+            if (PlaceholderType.TEXT == placeholder.type) {
                 result = StringUtils.replace(result, placeholder.ph, placeholder.text);
             }
         }
