@@ -245,6 +245,20 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
+    
+    @Test
+    public void testProcess_file3() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-14.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-3.docx");
+        resFile.delete();
+
+        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+
+        docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
 
     @Test
     public void testProcess_withInputStreamAsOutput() throws Exception {
