@@ -1,5 +1,6 @@
 Publishing to sonatype maven central
-mvn deploy -DperformRelease=true -Dgpg.passphrase=**** -Dgpg.keyname=<your key ID>
+1. mvn deploy -DperformRelease=true
+2. Go to oss.sonatype.org, login, close staging repository
 
 Links
 http://jroller.com/holy/entry/releasing_a_project_to_maven  
