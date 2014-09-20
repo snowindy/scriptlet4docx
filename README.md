@@ -67,6 +67,10 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 
 ## History
 
+###0.7.6###
+1. Fixed issue "Scriptlets don't allow using '>', '<', '"'". [issue#5](https://github.com/snowindy/scriptlet4docx/issues/6)
+2. Updated dependencies versions
+
 ###0.7.5###
 1. Fixed issue "Table scripting does not work when there is <w:tr* tags inside table cell". [issue#5](https://github.com/snowindy/scriptlet4docx/issues/5)
 
