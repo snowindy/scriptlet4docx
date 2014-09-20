@@ -35,7 +35,6 @@ public class DocxTemplater {
     private File pathToDocx;
     private InputStream templateStream;
     private String streamTemplateKey;
-    private static final TemplateFileManager templateFileManager = TemplateFileManager.getInstance();
 
     /**
      * Reads template content from file on file system.<br/>
@@ -90,11 +89,8 @@ public class DocxTemplater {
 
         Matcher m = scriptPattern.matcher(template);
 
-        System.out.println("template = "+template);
-        
         while (m.find()) {
             String scriptText = m.group(0);
-            System.out.println("Script = "+scriptText);
             Placeholder ph = new Placeholder(UUID.randomUUID().toString(), scriptText, PlaceholderType.SCRIPT);
 
             if (ph.scriptWrap == ScriptWraps.DOLLAR_PRINT) {
@@ -149,7 +145,6 @@ public class DocxTemplater {
         }
 
         template = builder.toString();
-        System.out.println("template = "+template);
 
         params.put(UTIL_FUNC_HOLDER, this);
 
@@ -182,24 +177,24 @@ public class DocxTemplater {
     static String CLASS_NAME = DocxTemplater.class.getCanonicalName();
     static Logger logger = Logger.getLogger(CLASS_NAME);
 
-    private String setupTemplate() throws IOException {
+    String setupTemplate() throws IOException {
         String templateKey = null;
         if (pathToDocx != null) {
             // this is file-base usage
-            // TODO what if hash collision? A longer hash algorythm may be
+            // TODO what if hash collision? A longer hash algorithm may be
             // needed.
             templateKey = pathToDocx.hashCode() + "-" + FilenameUtils.getBaseName(pathToDocx.getName());
-            if (!templateFileManager.isPrepared(templateKey)) {
-                templateFileManager.prepare(pathToDocx, templateKey);
+            if (!TemplateFileManager.getInstance().isPrepared(templateKey)) {
+                TemplateFileManager.getInstance().prepare(pathToDocx, templateKey);
             }
         } else {
             // this is stream-based usage
             try {
                 templateKey = streamTemplateKey;
-                if (!templateFileManager.isTemplateFileFromStreamExists(templateKey)) {
-                    templateFileManager.saveTemplateFileFromStream(templateKey, templateStream);
-                    templateFileManager
-                            .prepare(templateFileManager.getTemplateFileFromStream(templateKey), templateKey);
+                if (!TemplateFileManager.getInstance().isTemplateFileFromStreamExists(templateKey)) {
+                    TemplateFileManager.getInstance().saveTemplateFileFromStream(templateKey, templateStream);
+                    TemplateFileManager.getInstance().prepare(
+                            TemplateFileManager.getInstance().getTemplateFileFromStream(templateKey), templateKey);
                 }
             } finally {
                 IOUtils.closeQuietly(templateStream);
@@ -214,7 +209,7 @@ public class DocxTemplater {
      * result.
      */
     public InputStream processAndReturnInputStream(Map<String, Object> params) {
-        File tmpResFile = templateFileManager.getUniqueOutStreamFile();
+        File tmpResFile = TemplateFileManager.getInstance().getUniqueOutStreamFile();
         process(tmpResFile, params);
         try {
             return new DeleteOnCloseFileInputStream(tmpResFile);
@@ -250,38 +245,43 @@ public class DocxTemplater {
         try {
             String templateKey = setupTemplate();
 
-            String template = templateFileManager.getTemplateContent(templateKey);
+            String template = TemplateFileManager.getInstance().getTemplateContent(templateKey);
 
-            if (!templateFileManager.isPreProcessedTemplateExists(templateKey)) {
+            if (!TemplateFileManager.getInstance().isPreProcessedTemplateExists(templateKey)) {
                 template = cleanupTemplate(template);
-                templateFileManager.savePreProcessed(templateKey, template);
+                TemplateFileManager.getInstance().savePreProcessed(templateKey, template);
             }
 
             String result = processCleanedTemplate(template, params);
-
-            File tmpProcessFolder = templateFileManager.createTmpProcessFolder();
-
-            destDocx.delete();
-            FileUtils.deleteDirectory(tmpProcessFolder);
-
-            FileUtils.copyDirectory(templateFileManager.getTemplateUnzipFolder(templateKey), tmpProcessFolder);
-
-            FileUtils.writeStringToFile(new File(tmpProcessFolder, PATH_TO_CONTENT), result, "UTF-8");
-
-            AntBuilder antBuilder = new AntBuilder();
-            HashMap<String, Object> params1 = new HashMap<String, Object>();
-            params1.put("destfile", destDocx);
-            params1.put("basedir", tmpProcessFolder);
-            params1.put("includes", "**/*.*");
-            params1.put("excludes", "");
-            params1.put("encoding", "UTF-8");
-            antBuilder.invokeMethod("zip", params1);
-
-            FileUtils.deleteDirectory(tmpProcessFolder);
-
+            processResult(destDocx, templateKey, result);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    void processResult(File destDocx, String templateKey, String result) throws IOException {
+        File tmpProcessFolder = TemplateFileManager.getInstance().createTmpProcessFolder();
+
+        destDocx.delete();
+        FileUtils.deleteDirectory(tmpProcessFolder);
+
+        FileUtils
+                .copyDirectory(TemplateFileManager.getInstance().getTemplateUnzipFolder(templateKey), tmpProcessFolder);
+
+        FileUtils.writeStringToFile(new File(tmpProcessFolder, PATH_TO_CONTENT), result, "UTF-8");
+
+        AntBuilder antBuilder = new AntBuilder();
+        HashMap<String, Object> params1 = new HashMap<String, Object>();
+        params1.put("destfile", destDocx);
+        params1.put("basedir", tmpProcessFolder);
+        params1.put("includes", "**/*.*");
+        params1.put("excludes", "");
+        params1.put("encoding", "UTF-8");
+        antBuilder.invokeMethod("zip", params1);
+
+        FileUtils.deleteDirectory(tmpProcessFolder);
     }
 
     /**
@@ -290,7 +290,7 @@ public class DocxTemplater {
      */
     public static void cleanup() {
         try {
-            templateFileManager.cleanup();
+            TemplateFileManager.getInstance().cleanup();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

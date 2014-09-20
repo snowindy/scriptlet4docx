@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import mockit.Expectations;
+import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import mockit.Verifications;
 
@@ -204,7 +206,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("mom and dad"));
         assertTrue(result.contains("like dogs"));
     }
-    
+
     @Test
     public void testProcessScriptedTemplate_logicScriptlets_gt() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-15.xml");
@@ -235,7 +237,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("mom and dad"));
         assertTrue(result.contains("like kitties"));
     }
-    
+
     @Test
     public void testProcessScriptedTemplate_logicScriptlets_lt() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-16.xml");
@@ -266,7 +268,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("mom and dad"));
         assertTrue(result.contains("like dogs"));
     }
-    
+
     @Test
     public void testProcessScriptedTemplate_logicScriptlets_quote() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-17.xml");
@@ -324,7 +326,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
-    
+
     @Test
     public void testProcess_file2() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-13.docx");
@@ -338,7 +340,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
-    
+
     @Test
     public void testProcess_file3() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-14.docx");
@@ -387,35 +389,43 @@ public class DocxTemplaterTest extends Assert {
     }
 
     @Test
-    public void testProcess_fileMultiRun() throws Exception {
-        File inFile = File.createTempFile("docx-test", "docx");
-        FileUtils.copyFile(new File("src/test/resources/docx/DocxTemplaterTest-1.docx"), inFile);
-        inFile.deleteOnExit();
-        File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result1.docx");
-        resFile.delete();
+    public void testProcess_fileMultiRun(final @Mocked TemplateFileManager mgr) throws Exception {
+        File inFile = new File("1");
+        final File resFile = new File("2");
 
-        final TemplateFileManager mgr = TemplateFileManager.getInstance();
+        final DocxTemplater docxTemplater1 = new DocxTemplater(inFile);
 
-        new NonStrictExpectations(mgr) {
-        };
-
-        DocxTemplater docxTemplater1 = new DocxTemplater(inFile);
-
-        docxTemplater1.process(resFile, params);
-
-        DocxTemplater docxTemplater2 = new DocxTemplater(inFile);
-
-        docxTemplater2.process(resFile, params);
-
-        new Verifications() {
+        new NonStrictExpectations() {
             {
-                mgr.prepare((File) any, anyString);
-                times = 1;
+                TemplateFileManager.getInstance();
+                result = mgr;
             }
         };
 
-        assertTrue(resFile.exists());
-        assertTrue(resFile.length() > 0);
+        new Expectations(docxTemplater1) {
+            {
+                docxTemplater1.setupTemplate();
+                result = "t1";
+
+                mgr.getTemplateContent("t1");
+                result = "c1";
+
+                mgr.isPreProcessedTemplateExists("t1");
+                result = false;
+
+                docxTemplater1.cleanupTemplate("c1");
+                result = "c2";
+
+                mgr.savePreProcessed("t1", "c2");
+
+                docxTemplater1.processCleanedTemplate("c2", params);
+                result = "r1";
+
+                docxTemplater1.processResult(resFile, "t1", "r1");
+            }
+        };
+
+        docxTemplater1.process(resFile, params);
     }
 
     @Test
@@ -502,10 +512,10 @@ public class DocxTemplaterTest extends Assert {
 
         assertFalse(result.contains("space=\"preserve\">null<"));
         assertTrue(result.contains("space=\"preserve\"><"));
-        
+
         assertFalse(result.contains("space=\"arg1\">null<"));
         assertTrue(result.contains("space=\"arg1\"><"));
-        
+
         templater.setNullReplacement("UNKNOWD");
         result = templater.processCleanedTemplate(template, params);
 
