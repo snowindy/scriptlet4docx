@@ -90,8 +90,11 @@ public class DocxTemplater {
 
         Matcher m = scriptPattern.matcher(template);
 
+        System.out.println("template = "+template);
+        
         while (m.find()) {
             String scriptText = m.group(0);
+            System.out.println("Script = "+scriptText);
             Placeholder ph = new Placeholder(UUID.randomUUID().toString(), scriptText, PlaceholderType.SCRIPT);
 
             if (ph.scriptWrap == ScriptWraps.DOLLAR_PRINT) {
@@ -131,6 +134,9 @@ public class DocxTemplater {
         for (Placeholder placeholder : tplSkeleton) {
             if (PlaceholderType.SCRIPT == placeholder.type) {
                 String cleanScriptNoWrap = XMLUtils.getNoTagsTrimText(placeholder.getScriptTextNoWrap());
+                cleanScriptNoWrap = cleanScriptNoWrap.replace("&gt;", ">");
+                cleanScriptNoWrap = cleanScriptNoWrap.replace("&lt;", "<");
+                cleanScriptNoWrap = cleanScriptNoWrap.replace("&quot;", "\"");
                 if (placeholder.scriptWrap == ScriptWraps.DOLLAR_PRINT
                         || placeholder.scriptWrap == ScriptWraps.SCRIPLET_PRINT) {
                     cleanScriptNoWrap = NULL_REPLACER_REF + "(" + cleanScriptNoWrap + ")";
@@ -143,6 +149,7 @@ public class DocxTemplater {
         }
 
         template = builder.toString();
+        System.out.println("template = "+template);
 
         params.put(UTIL_FUNC_HOLDER, this);
 
