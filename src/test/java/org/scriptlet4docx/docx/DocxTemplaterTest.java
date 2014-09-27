@@ -299,6 +299,37 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("mom and dad"));
         assertTrue(result.contains("like dogs"));
     }
+    
+    @Test
+    public void testProcessScriptedTemplate_logicScriptlets_quoteCurly() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-18.xml");
+
+        HashMap<String, Object> params1 = new HashMap<String, Object>();
+        params1.put("value", "kitties");
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params1);
+
+        assertTrue(result != null);
+        assertTrue(!result.contains("else"));
+        assertTrue(!result.contains("if"));
+
+        assertTrue(result.contains("mom and dad"));
+        assertTrue(result.contains("like kitties"));
+
+        params1 = new HashMap<String, Object>();
+        params1.put("value", "dogs");
+
+        template = templater.cleanupTemplate(template);
+        result = templater.processCleanedTemplate(template, params1);
+
+        assertTrue(result != null);
+        assertTrue(!result.contains("else"));
+        assertTrue(!result.contains("if"));
+
+        assertTrue(result.contains("mom and dad"));
+        assertTrue(result.contains("like dogs"));
+    }
 
     @Test
     public void testProcessScriptedTemplate_spacePreserve() throws Exception {
