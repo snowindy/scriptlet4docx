@@ -23,6 +23,18 @@ public class TemplateFileManager {
         templatesDir = new File(tmpDir + "/scriptlet4docx", FastDateFormat.getInstance("yyyy-MM-dd-HH-mm-ss-SSS")
                 .format(new Date()));
         templatesDir.mkdirs();
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                File f = templatesDir.getParentFile();
+                try {
+                    FileUtils.deleteDirectory(f);
+                } catch (IOException e) {
+                    throw new RuntimeException("Unable to delete tmp directory " + f.getAbsolutePath(), e);
+                }
+            }
+        });
     }
 
     private volatile static TemplateFileManager instance = new TemplateFileManager();
