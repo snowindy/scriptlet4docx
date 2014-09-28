@@ -11,12 +11,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 
 public class TemplateFileManager {
 
     private TemplateFileManager() {
         String tmpDir = System.getProperty("java.io.tmpdir");
-        templatesDir = new File(tmpDir, "docx-tmpl-" + new Date().getTime() + "-" + UUID.randomUUID().toString());
+        templatesDir = new File(tmpDir + "/scriptlet4docx", FastDateFormat.getInstance("yyyy-MM-dd-HH-mm-ss-SSS")
+                .format(new Date()));
         templatesDir.mkdirs();
     }
 
