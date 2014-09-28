@@ -25,12 +25,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.scriptlet4docx.docx.Placeholder.PlaceholderType;
 import org.scriptlet4docx.docx.Placeholder.ScriptWraps;
+import org.scriptlet4docx.docx.TemplateContent.ContentItem;
 import org.scriptlet4docx.util.string.StringUtil;
 import org.scriptlet4docx.util.xml.XMLUtils;
 
 public class DocxTemplater {
-
-    static final String PATH_TO_CONTENT = "word/document.xml";
 
     private File pathToDocx;
     private InputStream templateStream;
@@ -73,10 +72,31 @@ public class DocxTemplater {
     private static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
             | Pattern.MULTILINE);
 
+    TemplateContent cleanupTemplate(TemplateContent content) {
+        List<ContentItem> items = new ArrayList<TemplateContent.ContentItem>();
+
+        for (int i = 0; i < content.getItems().size(); i++) {
+            items.add(new ContentItem(content.getItems().get(i).getIdentifier(), cleanupTemplate(content.getItems()
+                    .get(i).getContent())));
+        }
+        return new TemplateContent(items);
+    }
+
     String cleanupTemplate(String template) {
         template = DividedScriptWrapsProcessor.process(template);
         template = TableScriptingProcessor.process(template);
         return template;
+    }
+
+    TemplateContent processCleanedTemplate(TemplateContent content, Map<String, Object> params)
+            throws CompilationFailedException, ClassNotFoundException, IOException {
+        List<ContentItem> items = new ArrayList<TemplateContent.ContentItem>();
+
+        for (int i = 0; i < content.getItems().size(); i++) {
+            items.add(new ContentItem(content.getItems().get(i).getIdentifier(), processCleanedTemplate(content
+                    .getItems().get(i).getContent(), params)));
+        }
+        return new TemplateContent(items);
     }
 
     String processCleanedTemplate(String template, Map<String, Object> params) throws CompilationFailedException,
@@ -245,15 +265,15 @@ public class DocxTemplater {
         try {
             String templateKey = setupTemplate();
 
-            String template = TemplateFileManager.getInstance().getTemplateContent(templateKey);
+            TemplateContent tCont = TemplateFileManager.getInstance().getTemplateContent(templateKey);
 
             if (!TemplateFileManager.getInstance().isPreProcessedTemplateExists(templateKey)) {
-                template = cleanupTemplate(template);
-                TemplateFileManager.getInstance().savePreProcessed(templateKey, template);
+                tCont = cleanupTemplate(tCont);
+                TemplateFileManager.getInstance().savePreProcessed(templateKey, tCont);
             }
 
-            String result = processCleanedTemplate(template, params);
-            processResult(destDocx, templateKey, result);
+            tCont = processCleanedTemplate(tCont, params);
+            processResult(destDocx, templateKey, tCont);
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -261,7 +281,7 @@ public class DocxTemplater {
         }
     }
 
-    void processResult(File destDocx, String templateKey, String result) throws IOException {
+    void processResult(File destDocx, String templateKey, TemplateContent content) throws IOException {
         File tmpProcessFolder = TemplateFileManager.getInstance().createTmpProcessFolder();
 
         destDocx.delete();
@@ -270,7 +290,10 @@ public class DocxTemplater {
         FileUtils
                 .copyDirectory(TemplateFileManager.getInstance().getTemplateUnzipFolder(templateKey), tmpProcessFolder);
 
-        FileUtils.writeStringToFile(new File(tmpProcessFolder, PATH_TO_CONTENT), result, "UTF-8");
+        for (ContentItem item : content.getItems()) {
+            FileUtils.writeStringToFile(new File(tmpProcessFolder, "word/" + item.getIdentifier()), item.getContent(),
+                    "UTF-8");
+        }
 
         AntBuilder antBuilder = new AntBuilder();
         HashMap<String, Object> params1 = new HashMap<String, Object>();

@@ -6,12 +6,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.scriptlet4docx.docx.TemplateContent.ContentItem;
 
 public class TemplateFileManager {
 
@@ -37,19 +40,34 @@ public class TemplateFileManager {
         return templatesDir;
     }
 
-    public String getTemplateContent(String templateKey) throws IOException {
-        File contentFile = getTmplPreprocessedFile(templateKey);
+    public TemplateContent getTemplateContent(String templateKey) throws IOException {
+        File dir = new File(getTemplateUnzipFolder(templateKey), "word");
 
-        if (!contentFile.exists()) {
-            File dir = getTemplateUnzipFolder(templateKey);
-            contentFile = new File(dir, DocxTemplater.PATH_TO_CONTENT);
+        List<ContentItem> items = new ArrayList<ContentItem>();
+
+        for (File f : dir.listFiles()) {
+            if (f.isFile()
+                    && (f.getName().equals("document.xml") || f.getName().startsWith("header") || f.getName()
+                            .startsWith("footer"))) {
+                items.add(new ContentItem(f.getName(), null));
+            }
         }
-        return FileUtils.readFileToString(contentFile, "UTF-8");
+
+        for (ContentItem item : items) {
+            File contentFile = getTmplPreprocessedFile(templateKey, item.getIdentifier());
+
+            if (!contentFile.exists()) {
+                contentFile = new File(dir, item.getIdentifier());
+            }
+
+            item.setContent(FileUtils.readFileToString(contentFile, "UTF-8"));
+        }
+
+        return new TemplateContent(items);
     }
 
     static final String DOC_UNZIP_FOLDER_NAME = "/doc-unzip";
     static final String DOC_READY_STREAM_FOLDER_NAME = "/doc-ready-streamed";
-    static final String DOC_CONTENT_PREPROCESSED = "/doc-tmpl-preprocessed.xml";
     static final String DOC_FROM_STREAM = "/tmpl-from-stream.docx";
 
     public File getTemplateUnzipFolder(String templateKey) {
@@ -60,8 +78,8 @@ public class TemplateFileManager {
         return new File(templatesDir, UUID.randomUUID().toString());
     }
 
-    private File getTmplPreprocessedFile(String templateKey) {
-        return new File(templatesDir, templateKey + "/" + DOC_CONTENT_PREPROCESSED);
+    private File getTmplPreprocessedFile(String templateKey, String identifier) {
+        return new File(templatesDir, templateKey + "/preproc-" + identifier);
     }
 
     public boolean isPrepared(String templateKey) {
@@ -85,13 +103,15 @@ public class TemplateFileManager {
     }
 
     public boolean isPreProcessedTemplateExists(String templateKey) {
-        File preprocessed = getTmplPreprocessedFile(templateKey);
+        File preprocessed = getTmplPreprocessedFile(templateKey, "document.xml");
         return preprocessed.exists();
     }
 
-    public void savePreProcessed(String templateKey, String content) throws IOException {
-        File preprocessed = getTmplPreprocessedFile(templateKey);
-        FileUtils.writeStringToFile(preprocessed, content, "UTF-8");
+    public void savePreProcessed(String templateKey, TemplateContent content) throws IOException {
+        for (ContentItem item : content.getItems()) {
+            File preprocessed = getTmplPreprocessedFile(templateKey, item.getIdentifier());
+            FileUtils.writeStringToFile(preprocessed, item.getContent(), "UTF-8");
+        }
     }
 
     public void cleanup() throws IOException {

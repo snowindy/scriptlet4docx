@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.scriptlet4docx.docx.TemplateContent.ContentItem;
 import org.scriptlet4docx.util.test.TestUtils;
 
 public class DocxTemplaterTest extends Assert {
@@ -51,6 +53,11 @@ public class DocxTemplaterTest extends Assert {
         employeeList.add(p2);
 
         params.put("employeeList", employeeList);
+        HashMap<String, Object> p3 = new HashMap<String, Object>();
+        p3.put("nomeCliente", "Bob Smith");
+
+        params.put("crm", p3);
+
     }
 
     @Test
@@ -299,7 +306,7 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("mom and dad"));
         assertTrue(result.contains("like dogs"));
     }
-    
+
     @Test
     public void testProcessScriptedTemplate_logicScriptlets_quoteCurly() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-18.xml");
@@ -433,26 +440,30 @@ public class DocxTemplaterTest extends Assert {
             }
         };
 
+        final TemplateContent c1 = new TemplateContent(Arrays.asList(new ContentItem("", "")));
+        final TemplateContent c2 = new TemplateContent(Arrays.asList(new ContentItem("", "")));
+        final TemplateContent c3 = new TemplateContent(Arrays.asList(new ContentItem("", "")));
+
         new Expectations(docxTemplater1) {
             {
                 docxTemplater1.setupTemplate();
                 result = "t1";
 
                 mgr.getTemplateContent("t1");
-                result = "c1";
+                result = c1;
 
                 mgr.isPreProcessedTemplateExists("t1");
                 result = false;
 
-                docxTemplater1.cleanupTemplate("c1");
-                result = "c2";
+                docxTemplater1.cleanupTemplate(c1);
+                result = c2;
 
-                mgr.savePreProcessed("t1", "c2");
+                mgr.savePreProcessed("t1", c2);
 
-                docxTemplater1.processCleanedTemplate("c2", params);
-                result = "r1";
+                docxTemplater1.processCleanedTemplate(c2, params);
+                result = c3;
 
-                docxTemplater1.processResult(resFile, "t1", "r1");
+                docxTemplater1.processResult(resFile, "t1", c3);
             }
         };
 
@@ -463,6 +474,20 @@ public class DocxTemplaterTest extends Assert {
     public void testProcess_stream() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
         File resFile = new File("target/test-files/DocxTemplaterTest-1-stream-result.docx");
+        resFile.delete();
+
+        DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k1");
+
+        docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
+
+    @Test
+    public void testProcess_header() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-2-header.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-2-header.docx");
         resFile.delete();
 
         DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k1");
