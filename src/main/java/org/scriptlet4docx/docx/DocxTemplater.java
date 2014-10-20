@@ -150,8 +150,8 @@ public class DocxTemplater {
         for (Placeholder placeholder : tplSkeleton) {
             if (PlaceholderType.SCRIPT == placeholder.type) {
                 String cleanScriptNoWrap = XMLUtils.getNoTagsTrimText(placeholder.getScriptTextNoWrap());
-                cleanScriptNoWrap = StringUtils.replaceEach(cleanScriptNoWrap, new String[] { "&gt;", "&lt;", "&quot;",
-                        "«", "»", "“", "”", "‘", "’" }, new String[] { ">", "<", "\"", "\"", "\"", "\"", "\"", "\"",
+                cleanScriptNoWrap = StringUtils.replaceEach(cleanScriptNoWrap, new String[] {"&amp;", "&gt;", "&lt;", "&quot;",
+                        "«", "»", "“", "”", "‘", "’" }, new String[] {"&", ">", "<", "\"", "\"", "\"", "\"", "\"", "\"",
                         "\"" });
                 if (placeholder.scriptWrap == ScriptWraps.DOLLAR_PRINT
                         || placeholder.scriptWrap == ScriptWraps.SCRIPLET_PRINT) {
