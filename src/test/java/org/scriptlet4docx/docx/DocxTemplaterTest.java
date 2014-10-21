@@ -579,4 +579,22 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("space=\"arg1\">UNKNOWD<"));
     }
 
+    @Test
+    public void testProcessScriptedTemplate_booleanAndCond() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-19.xml");
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+
+        params.put("cond1", "1");
+        params.put("cond2", true);
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
+        assertTrue(result.contains("like kitties"));
+        
+        params.put("cond1", false);
+        result = templater.processCleanedTemplate(template, params);
+        assertFalse(result.contains("like kitties"));
+    }
+
 }
