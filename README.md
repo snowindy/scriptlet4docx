@@ -67,6 +67,9 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 
 ## History
 
+###0.8.1###
+1. Fixed issue "Cannot use && in conditions". [issue#11](https://github.com/snowindy/scriptlet4docx/issues/11)
+
 ###0.8.0###
 1. Fixed issue "Scriptlets don´t work in header and Footer". [issue#8](https://github.com/snowindy/scriptlet4docx/issues/8)
 2. Fixed issue "Unable to use quotes in expressions". [issue#9](https://github.com/snowindy/scriptlet4docx/issues/9)
