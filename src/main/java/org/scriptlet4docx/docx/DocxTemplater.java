@@ -1,6 +1,7 @@
 package org.scriptlet4docx.docx;
 
 import groovy.text.GStringTemplateEngine;
+import groovy.text.TemplateEngine;
 import groovy.util.AntBuilder;
 
 import java.io.File;
@@ -34,6 +35,15 @@ public class DocxTemplater {
     private File pathToDocx;
     private InputStream templateStream;
     private String streamTemplateKey;
+    private TemplateEngine templateEngine;
+    
+    /**
+     * Set default Template Engine
+     * 
+     */
+    {
+    	setTemplateEngine(new GStringTemplateEngine());
+    }
 
     /**
      * Reads template content from file on file system.<br/>
@@ -172,10 +182,9 @@ public class DocxTemplater {
             logger.logp(Level.FINEST, CLASS_NAME, methodName, String.format("\ntemplate = \n%s\n", template));
         }
 
-        GStringTemplateEngine engine1 = new GStringTemplateEngine();
         String scriptAppliedStr;
         try {
-            scriptAppliedStr = String.valueOf(engine1.createTemplate(template).make(params));
+            scriptAppliedStr = String.valueOf(templateEngine.createTemplate(template).make(params));
         } catch (Throwable e) {
             logger.logp(Level.SEVERE, CLASS_NAME, methodName,
                     String.format("Cannot process template: [%s].", template), e);
@@ -339,5 +348,21 @@ public class DocxTemplater {
     public void setNullReplacement(String nullReplacement) {
         this.nullReplacement = nullReplacement;
     }
+    
+    /**
+     * Returns current Template Engine
+     * @return TemplateEngine implementation
+     */
+	public TemplateEngine getTemplateEngine() {
+		return templateEngine;
+	}
+	
+	/**
+	 * When a different Template Engine other than GStringTemplateEngine is required.
+	 * @param templateEngine
+	 */
+	public void setTemplateEngine(TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
+	}
 
 }
