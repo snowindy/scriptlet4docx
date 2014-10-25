@@ -67,6 +67,9 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 
 ## History
 
+###0.8.2###
+1. Merged pull request "Make TemplateEngine configurable". [pull-request#13](https://github.com/snowindy/scriptlet4docx/pull/13)
+
 ###0.8.1###
 1. Fixed issue "Cannot use && in conditions". [issue#11](https://github.com/snowindy/scriptlet4docx/issues/11)
 
