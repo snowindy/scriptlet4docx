@@ -36,13 +36,13 @@ public class DocxTemplater {
     private InputStream templateStream;
     private String streamTemplateKey;
     private TemplateEngine templateEngine;
-    
+
     /**
      * Set default Template Engine
      * 
      */
     {
-    	setTemplateEngine(new GStringTemplateEngine());
+        setTemplateEngine(new GStringTemplateEngine());
     }
 
     /**
@@ -82,7 +82,7 @@ public class DocxTemplater {
     private static Pattern scriptPattern = Pattern.compile("((&lt;%=?(.*?)%&gt;)|\\$\\{(.*?)\\})", Pattern.DOTALL
             | Pattern.MULTILINE);
 
-    TemplateContent cleanupTemplate(TemplateContent content) {
+    protected TemplateContent cleanupTemplate(TemplateContent content) {
         List<ContentItem> items = new ArrayList<TemplateContent.ContentItem>();
 
         for (int i = 0; i < content.getItems().size(); i++) {
@@ -92,13 +92,13 @@ public class DocxTemplater {
         return new TemplateContent(items);
     }
 
-    String cleanupTemplate(String template) {
+    protected String cleanupTemplate(String template) {
         template = DividedScriptWrapsProcessor.process(template);
         template = TableScriptingProcessor.process(template);
         return template;
     }
 
-    TemplateContent processCleanedTemplate(TemplateContent content, Map<String, Object> params)
+    protected TemplateContent processCleanedTemplate(TemplateContent content, Map<String, Object> params)
             throws CompilationFailedException, ClassNotFoundException, IOException {
         List<ContentItem> items = new ArrayList<TemplateContent.ContentItem>();
 
@@ -109,8 +109,23 @@ public class DocxTemplater {
         return new TemplateContent(items);
     }
 
-    String processCleanedTemplate(String template, Map<String, Object> params) throws CompilationFailedException,
-            ClassNotFoundException, IOException {
+    protected Map<String, Object> processParams(Map<String, Object> params) {
+        Map<String, Object> res = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> e : params.entrySet()) {
+            Object v = e.getValue();
+            if (v instanceof String) {
+                String sv = (String) v;
+                sv = sv.replace("\r\n", "\n");
+                sv = sv.replace("\n", "<w:br/>");
+                v = sv;
+            }
+            res.put(e.getKey(), v);
+        }
+        return res;
+    }
+
+    protected String processCleanedTemplate(String template, Map<String, Object> params)
+            throws CompilationFailedException, ClassNotFoundException, IOException {
         final String methodName = "processScriptedTemplate";
 
         String replacement = UUID.randomUUID().toString();
@@ -206,7 +221,7 @@ public class DocxTemplater {
     static String CLASS_NAME = DocxTemplater.class.getCanonicalName();
     static Logger logger = Logger.getLogger(CLASS_NAME);
 
-    String setupTemplate() throws IOException {
+    protected String setupTemplate() throws IOException {
         String templateKey = null;
         if (pathToDocx != null) {
             // this is file-base usage
@@ -281,6 +296,8 @@ public class DocxTemplater {
                 TemplateFileManager.getInstance().savePreProcessed(templateKey, tCont);
             }
 
+            params = processParams(params);
+
             tCont = processCleanedTemplate(tCont, params);
             processResult(destDocx, templateKey, tCont);
         } catch (RuntimeException e) {
@@ -290,7 +307,7 @@ public class DocxTemplater {
         }
     }
 
-    void processResult(File destDocx, String templateKey, TemplateContent content) throws IOException {
+    protected void processResult(File destDocx, String templateKey, TemplateContent content) throws IOException {
         File tmpProcessFolder = TemplateFileManager.getInstance().createTmpProcessFolder();
 
         destDocx.delete();
@@ -348,21 +365,24 @@ public class DocxTemplater {
     public void setNullReplacement(String nullReplacement) {
         this.nullReplacement = nullReplacement;
     }
-    
+
     /**
      * Returns current Template Engine
+     * 
      * @return TemplateEngine implementation
      */
-	public TemplateEngine getTemplateEngine() {
-		return templateEngine;
-	}
-	
-	/**
-	 * When a different Template Engine other than GStringTemplateEngine is required.
-	 * @param templateEngine
-	 */
-	public void setTemplateEngine(TemplateEngine templateEngine) {
-		this.templateEngine = templateEngine;
-	}
+    public TemplateEngine getTemplateEngine() {
+        return templateEngine;
+    }
+
+    /**
+     * When a different Template Engine other than GStringTemplateEngine is
+     * required.
+     * 
+     * @param templateEngine
+     */
+    public void setTemplateEngine(TemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
+    }
 
 }
