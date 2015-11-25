@@ -178,6 +178,14 @@ public class DocxTemplater {
                 cleanScriptNoWrap = StringUtils.replaceEach(cleanScriptNoWrap, new String[] { "&amp;", "&gt;", "&lt;",
                         "&quot;", "«", "»", "“", "”", "‘", "’" }, new String[] { "&", ">", "<", "\"", "\"", "\"", "\"",
                         "\"", "\"", "\"" });
+
+                // Replacing missing replacements, at least on top level
+                if (!cleanScriptNoWrap.contains(".")) {
+                    if (!params.containsKey(cleanScriptNoWrap)) {
+                        params.put(cleanScriptNoWrap, null);
+                    }
+                }
+
                 if (placeholder.scriptWrap == ScriptWraps.DOLLAR_PRINT
                         || placeholder.scriptWrap == ScriptWraps.SCRIPLET_PRINT) {
                     cleanScriptNoWrap = NULL_REPLACER_REF + "(" + cleanScriptNoWrap + ")";
@@ -358,7 +366,7 @@ public class DocxTemplater {
     /**
      * 
      * @param nullReplacement
-     *            When scriptlet output is null this value take it's place.<br />
+     *            When scriptlet output is null this value take its place.<br />
      *            Useful when you want nothing to be printed, or custom value
      *            like "UNKNOWN".
      */
