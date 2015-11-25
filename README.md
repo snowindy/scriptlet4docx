@@ -67,8 +67,11 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 
 ## History
 
+###0.8.4###
+1. Fixed issue "Gracefully use null replacements in case of missing property in template params". [issue#15](https://github.com/snowindy/scriptlet4docx/issues/15)
+
 ###0.8.3###
-1. Fixed issue "Need ability to render <w:br/>". [issue#11](https://github.com/snowindy/scriptlet4docx/issues/14)
+1. Fixed issue "Need ability to render <w:br/>". [issue#14](https://github.com/snowindy/scriptlet4docx/issues/14)
 
 ###0.8.2###
 1. Merged pull request "Make TemplateEngine configurable". [pull-request#13](https://github.com/snowindy/scriptlet4docx/pull/13)
