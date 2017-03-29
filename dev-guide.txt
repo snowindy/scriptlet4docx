@@ -1,6 +1,12 @@
+Setup for publishing
+1. Verify you're signed to nexus repo: access key for `nexus-releases` server from oss.sonatype.com should be ~/.m2/settings.xml
+2. Verify your machine has completed GPG key creation: gpg --gen-key
+3. Send public key so everybody can verify validity: gpg --keyserver hkp://pgp.mit.edu --send-keys <KEY>
+
 Publishing to sonatype maven central
-1. mvn clean deploy -DperformRelease=true
+1. mvn clean deploy -DperformRelease=true -Dgpg.passphrase="<GPG PASSPHRASE HERE>"
 2. Go to oss.sonatype.org, login, close staging repository
 
 Links
-http://jroller.com/holy/entry/releasing_a_project_to_maven  
+http://jroller.com/holy/entry/releasing_a_project_to_maven
+http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven/
