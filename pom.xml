@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.snowindy</groupId>
 	<artifactId>scriptlet4docx</artifactId>
-	<version>0.8.4</version>
+	<version>0.8.5</version>
 	<name>Scriptlet4docx</name>
 
 	<properties>
@@ -98,6 +98,10 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+							<!-- http://stackoverflow.com/questions/15886209/maven-is-not-working-in-java-8-when-javadoc-tags-are-incomplete -->
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

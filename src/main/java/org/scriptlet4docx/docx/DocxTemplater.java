@@ -109,14 +109,16 @@ public class DocxTemplater {
         return new TemplateContent(items);
     }
 
-    protected Map<String, Object> processParams(Map<String, Object> params) {
+    private static String NEW_LINE_PLACEHOLDER = "26f679ad-e7fd-4d42-9e05-946f393c277d";
+
+    protected static Map<String, Object> processParams(Map<String, Object> params) {
         Map<String, Object> res = new HashMap<String, Object>();
         for (Map.Entry<String, Object> e : params.entrySet()) {
             Object v = e.getValue();
             if (v instanceof String) {
                 String sv = (String) v;
                 sv = sv.replace("\r\n", "\n");
-                sv = sv.replace("\n", "<w:br/>");
+                sv = sv.replace("\n", NEW_LINE_PLACEHOLDER);
                 v = sv;
             }
             res.put(e.getKey(), v);
@@ -127,6 +129,8 @@ public class DocxTemplater {
     protected String processCleanedTemplate(String template, Map<String, Object> params)
             throws CompilationFailedException, ClassNotFoundException, IOException {
         final String methodName = "processScriptedTemplate";
+
+        params = processParams(params);
 
         String replacement = UUID.randomUUID().toString();
 
@@ -216,6 +220,8 @@ public class DocxTemplater {
 
         scriptAppliedStr = StringUtil.escapeSimpleSet(scriptAppliedStr);
 
+        scriptAppliedStr = StringUtils.replace(scriptAppliedStr, NEW_LINE_PLACEHOLDER, "<w:br/>");
+
         String result = scriptAppliedStr;
         for (Placeholder placeholder : tplSkeleton) {
             if (PlaceholderType.TEXT == placeholder.type) {
@@ -303,8 +309,6 @@ public class DocxTemplater {
                 tCont = cleanupTemplate(tCont);
                 TemplateFileManager.getInstance().savePreProcessed(templateKey, tCont);
             }
-
-            params = processParams(params);
 
             tCont = processCleanedTemplate(tCont, params);
             processResult(destDocx, templateKey, tCont);

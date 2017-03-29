@@ -620,4 +620,17 @@ public class DocxTemplaterTest extends Assert {
         assertFalse(result.contains("like kitties"));
     }
 
+    @Test
+    public void testProcessScriptedTemplate_newLine() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-20.xml");
+
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        params.put("hasNewLines", "this is A\n this is B\r\n this is C");
+        String result = templater.processCleanedTemplate(template, DocxTemplater.processParams(params));
+
+        assertTrue(result != null);
+        assertTrue(result.contains("this is A<w:br/>"));
+        assertTrue(StringUtils.countMatches(result, "this is A<w:br/>") == 4);
+    }
 }

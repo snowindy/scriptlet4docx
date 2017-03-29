@@ -67,6 +67,9 @@ InputStream docInputStream = docxTemplater.processAndReturnInputStream(params);
 
 ## History
 
+###0.8.5###
+1. Fixed issue "Line Break Characters aren't working correctly". [issue#17](https://github.com/snowindy/scriptlet4docx/issues/17)
+
 ###0.8.4###
 1. Fixed issue "Gracefully use null replacements in case of missing property in template params". [issue#15](https://github.com/snowindy/scriptlet4docx/issues/15)
 
