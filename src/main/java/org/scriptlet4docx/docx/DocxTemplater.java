@@ -183,8 +183,9 @@ public class DocxTemplater {
                         "&quot;", "«", "»", "“", "”", "‘", "’" }, new String[] { "&", ">", "<", "\"", "\"", "\"", "\"",
                         "\"", "\"", "\"" });
 
+                cleanScriptNoWrap = cleanScriptNoWrap.trim();
                 // Replacing missing replacements, at least on top level
-                if (!cleanScriptNoWrap.contains(".")) {
+                if (cleanScriptNoWrap.matches("\\w+")) {
                     if (!params.containsKey(cleanScriptNoWrap)) {
                         params.put(cleanScriptNoWrap, null);
                     }
