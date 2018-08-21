@@ -20,7 +20,7 @@ class Placeholder {
             format = "${%s}";
         } else if (scriptWrap == ScriptWraps.SCRIPLET) {
             format = "<%%%s%%>";
-        } else if (scriptWrap == ScriptWraps.SCRIPLET_PRINT) {
+        } else if (scriptWrap == ScriptWraps.SCRIPLET_PRINT || scriptWrap == ScriptWraps.BREAK) {
             format = "<%%=%s%%>";
         } else {
             throw new RuntimeException(String.format("ScriptWrap is undefined: %s", scriptWrap));
@@ -47,6 +47,8 @@ class Placeholder {
             scriptWrap = ScriptWraps.SCRIPLET_PRINT;
         } else if (noSpaces.startsWith("&lt;%")) {
             scriptWrap = ScriptWraps.SCRIPLET;
+        } else if(noSpaces.startsWith("&lt;!")) {
+        	scriptWrap = ScriptWraps.BREAK;
         } else {
             throw new IllegalArgumentException(String.format("Script wrap cannot be detected: [%s]", text));
         }
@@ -55,7 +57,8 @@ class Placeholder {
     static enum ScriptWraps {
         DOLLAR_PRINT, // ${}
         SCRIPLET, // <%%>
-        SCRIPLET_PRINT // <%=%>
+        SCRIPLET_PRINT, // <%=%>
+        BREAK // <!=%>
     }
 
     static enum PlaceholderType {

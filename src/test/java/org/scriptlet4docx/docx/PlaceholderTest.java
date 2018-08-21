@@ -25,6 +25,11 @@ public class PlaceholderTest {
 				"&lt;% foo.bar() %&gt;", PlaceholderType.SCRIPT);
 		
 		assertEquals("<% foo.bar() %>", ph.constructWithCurrentScriptWrap(" foo.bar() "));
+		
+		ph = new Placeholder(UUID.randomUUID().toString(),
+				"&lt;!=BREAK !&gt;", PlaceholderType.SCRIPT);
+		
+		assertEquals("<%= BREAK %>", ph.constructWithCurrentScriptWrap(" BREAK "));
 	}
 
 }
