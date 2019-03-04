@@ -9,11 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import mockit.Expectations;
-import mockit.Mocked;
-import mockit.NonStrictExpectations;
-import mockit.Verifications;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -22,9 +17,12 @@ import org.junit.Test;
 import org.scriptlet4docx.docx.TemplateContent.ContentItem;
 import org.scriptlet4docx.util.test.TestUtils;
 
-import groovy.lang.GroovyRuntimeException;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.NonStrictExpectations;
+import mockit.Verifications;
 
-public class DocxTemplaterTest extends Assert {
+public class DocxTemplaterBulkTest extends Assert {
 
     static HashMap<String, Object> params;
 
@@ -61,19 +59,32 @@ public class DocxTemplaterTest extends Assert {
         params.put("crm", p3);
 
     }
-
+    
     @Test
-    public void testProcessScriptedTemplate() throws Exception {
+    public void testProcessScriptedTemplateBulk() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-13.xml");
 
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
         assertTrue(result.contains("123#445"));
         assertTrue(StringUtils.countMatches(result, "123#445") == 4);
+        assertFalse(result.contains("BREAK"));
+    }
 
+    @Test
+    public void testProcessScriptedTemplate() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-1.xml");
+
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
+
+        assertTrue(result != null);
+        assertTrue(result.contains("123#445"));
+        assertTrue(StringUtils.countMatches(result, "123#445") == 4);
     }
     
 
@@ -81,7 +92,7 @@ public class DocxTemplaterTest extends Assert {
     public void testProcessScriptedTemplate_brokenType1() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-2.xml");
 
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -110,7 +121,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_tableScripting() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-6.xml");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -125,7 +136,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_brokenType2() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-3.xml");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -137,7 +148,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_brokenType2_noProcess() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-7.xml");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         String result = templater.processCleanedTemplate(template, params);
 
         assertTrue(result != null);
@@ -147,7 +158,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_tableScripting_iterStatus() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-8.xml");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -167,7 +178,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_tableScripting_iterStatus_multiTable() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-4.xml");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -193,7 +204,7 @@ public class DocxTemplaterTest extends Assert {
 
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", 1);
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params1);
 
@@ -224,7 +235,7 @@ public class DocxTemplaterTest extends Assert {
 
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", 1);
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params1);
 
@@ -255,7 +266,7 @@ public class DocxTemplaterTest extends Assert {
 
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", 1);
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params1);
 
@@ -286,7 +297,7 @@ public class DocxTemplaterTest extends Assert {
 
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", "kitties");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params1);
 
@@ -317,7 +328,7 @@ public class DocxTemplaterTest extends Assert {
 
         HashMap<String, Object> params1 = new HashMap<String, Object>();
         params1.put("value", "kitties");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params1);
 
@@ -345,7 +356,7 @@ public class DocxTemplaterTest extends Assert {
     @Test
     public void testProcessScriptedTemplate_spacePreserve() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-10.xml");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -361,7 +372,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-1.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(inFile);
 
         docxTemplater.process(resFile, params);
 
@@ -375,7 +386,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-2.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(inFile);
 
         docxTemplater.process(resFile, params);
 
@@ -389,7 +400,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-3.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(inFile);
 
         docxTemplater.process(resFile, params);
 
@@ -397,20 +408,19 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(resFile.length() > 0);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testProcess_file4() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-large.docx");
         File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-large.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(inFile);
 
         docxTemplater.process(resFile, params);
 
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
-
 
     @Test
     public void testProcess_withInputStreamAsOutput() throws Exception {
@@ -418,7 +428,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-2-result.docx");
         resFile.delete();
 
-        DocxTemplater templater = new DocxTemplater(inFile);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(inFile);
 
         InputStream resStream = templater.processAndReturnInputStream(params);
 
@@ -437,7 +447,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-3-result.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(inFile);
 
         docxTemplater.process(new FileOutputStream(resFile), params);
 
@@ -450,7 +460,7 @@ public class DocxTemplaterTest extends Assert {
         File inFile = new File("1");
         final File resFile = new File("2");
 
-        final DocxTemplater docxTemplater1 = new DocxTemplater(inFile);
+        final DocxTemplaterBulk docxTemplater1 = new DocxTemplaterBulk(inFile);
 
         new NonStrictExpectations() {
             {
@@ -495,7 +505,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-1-stream-result.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k1");
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(new FileInputStream(inFile), "k1");
 
         docxTemplater.process(resFile, params);
 
@@ -509,7 +519,7 @@ public class DocxTemplaterTest extends Assert {
         File resFile = new File("target/test-files/DocxTemplaterTest-2-header.docx");
         resFile.delete();
 
-        DocxTemplater docxTemplater = new DocxTemplater(new FileInputStream(inFile), "k1");
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(new FileInputStream(inFile), "k1");
 
         docxTemplater.process(resFile, params);
 
@@ -526,8 +536,8 @@ public class DocxTemplaterTest extends Assert {
         final InputStream stream1 = new FileInputStream(inFile);
         final InputStream stream2 = new FileInputStream(inFile);
 
-        final DocxTemplater docxTemplater1 = new DocxTemplater(stream1, "k2");
-        final DocxTemplater docxTemplater2 = new DocxTemplater(stream2, "k2");
+        final DocxTemplaterBulk docxTemplater1 = new DocxTemplaterBulk(stream1, "k2");
+        final DocxTemplaterBulk docxTemplater2 = new DocxTemplaterBulk(stream2, "k2");
 
         new NonStrictExpectations(stream2) {
         };
@@ -567,7 +577,7 @@ public class DocxTemplaterTest extends Assert {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         params.put("escapeTest", "This should be escaped: &, <, >.");
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -581,7 +591,7 @@ public class DocxTemplaterTest extends Assert {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
         params.put("someNullyVar", null);
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -604,7 +614,7 @@ public class DocxTemplaterTest extends Assert {
 
         HashMap<String, Object> params = new HashMap<String, Object>();
 
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
 
@@ -629,7 +639,7 @@ public class DocxTemplaterTest extends Assert {
 
         params.put("cond1", "1");
         params.put("cond2", true);
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         String result = templater.processCleanedTemplate(template, params);
         assertTrue(result.contains("like kitties"));
@@ -643,7 +653,7 @@ public class DocxTemplaterTest extends Assert {
     public void testProcessScriptedTemplate_newLine() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-20.xml");
 
-        DocxTemplater templater = new DocxTemplater(none);
+        DocxTemplaterBulk templater = new DocxTemplaterBulk(none);
         template = templater.cleanupTemplate(template);
         params.put("hasNewLines", "this is A\n this is B\r\n this is C");
         String result = templater.processCleanedTemplate(template, DocxTemplater.processParams(params));
