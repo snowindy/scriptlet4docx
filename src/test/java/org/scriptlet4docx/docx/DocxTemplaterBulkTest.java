@@ -409,6 +409,20 @@ public class DocxTemplaterBulkTest extends Assert {
     }
 
     @Test
+    public void testProcess_file4() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-large.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-large.docx");
+        resFile.delete();
+
+        DocxTemplaterBulk docxTemplater = new DocxTemplaterBulk(inFile);
+
+        docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
+
+    @Test
     public void testProcess_withInputStreamAsOutput() throws Exception {
         File inFile = new File("src/test/resources/docx/DocxTemplaterTest-1.docx");
         File resFile = new File("target/test-files/DocxTemplaterTest-stream-2-result.docx");

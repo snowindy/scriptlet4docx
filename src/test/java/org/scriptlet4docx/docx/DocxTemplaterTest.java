@@ -22,6 +22,8 @@ import org.junit.Test;
 import org.scriptlet4docx.docx.TemplateContent.ContentItem;
 import org.scriptlet4docx.util.test.TestUtils;
 
+import groovy.lang.GroovyRuntimeException;
+
 public class DocxTemplaterTest extends Assert {
 
     static HashMap<String, Object> params;
@@ -394,6 +396,21 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(resFile.exists());
         assertTrue(resFile.length() > 0);
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testProcess_file4() throws Exception {
+        File inFile = new File("src/test/resources/docx/DocxTemplaterTest-large.docx");
+        File resFile = new File("target/test-files/DocxTemplaterTest-1-file-result-large.docx");
+        resFile.delete();
+
+        DocxTemplater docxTemplater = new DocxTemplater(inFile);
+
+        docxTemplater.process(resFile, params);
+
+        assertTrue(resFile.exists());
+        assertTrue(resFile.length() > 0);
+    }
+
 
     @Test
     public void testProcess_withInputStreamAsOutput() throws Exception {
