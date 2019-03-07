@@ -168,16 +168,15 @@ public class DocxTemplater {
 
         int i = 0;
         for (String piece : pieces) {
-            Placeholder nextScript = i < scripts.size() ? scripts.get(i) : null;
-            if (nextScript != null && piece.endsWith(WT_NO_PRESERVE)) {
-                // Always preserve spaces of scripts and between scripts
+            if (i < scripts.size() && piece.endsWith(WT_NO_PRESERVE)) {
+                // Always preserve spaces of the following scripts
                 piece = piece.substring(0, piece.length() - WT_NO_PRESERVE.length()) + WT_SPACE_PRESERVE;
             }
 
             tplSkeleton.add(new Placeholder(UUID.randomUUID().toString(), piece, PlaceholderType.TEXT));
 
-            if (nextScript != null) {
-                tplSkeleton.add(nextScript);
+            if (i < scripts.size()) {
+                tplSkeleton.add(scripts.get(i));
             }
             i++;
         }
