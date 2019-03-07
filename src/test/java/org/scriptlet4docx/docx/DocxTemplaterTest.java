@@ -635,7 +635,7 @@ public class DocxTemplaterTest extends Assert {
     }
 
     @Test
-    public void testProcessScriptedTemplate_spacePreserveAfterScript() throws Exception {
+    public void testProcessScriptedTemplate_spacePreserveScript() throws Exception {
         String template = TestUtils.readResource("/docx/DocxTemplaterTest-21.xml");
         DocxTemplater templater = new DocxTemplater(none);
         template = templater.cleanupTemplate(template);
