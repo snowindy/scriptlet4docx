@@ -633,4 +633,16 @@ public class DocxTemplaterTest extends Assert {
         assertTrue(result.contains("this is A<w:br/>"));
         assertTrue(StringUtils.countMatches(result, "this is A<w:br/>") == 4);
     }
+
+    @Test
+    public void testProcessScriptedTemplate_spacePreserveAfterScript() throws Exception {
+        String template = TestUtils.readResource("/docx/DocxTemplaterTest-21.xml");
+        DocxTemplater templater = new DocxTemplater(none);
+        template = templater.cleanupTemplate(template);
+        String result = templater.processCleanedTemplate(template, params);
+
+        assertTrue(result != null);
+        assertTrue(result.contains("<w:t xml:space=\"preserve\">First </w:t>"));
+        assertTrue(result.contains("<w:t xml:space=\"preserve\">Second</w:t>"));
+    }
 }

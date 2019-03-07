@@ -110,6 +110,9 @@ public class DocxTemplater {
     }
 
     private static String NEW_LINE_PLACEHOLDER = "26f679ad-e7fd-4d42-9e05-946f393c277d";
+    private static String WT_NO_PRESERVE = "<w:t>";
+    private static String WT_SPACE_PRESERVE = "<w:t xml:space=\"preserve\">";
+    private static String SPACE_PRESERVE = "xml:space=\"preserve\"";
 
     protected static Map<String, Object> processParams(Map<String, Object> params) {
         Map<String, Object> res = new HashMap<String, Object>();
@@ -166,10 +169,16 @@ public class DocxTemplater {
 
         int i = 0;
         for (String piece : pieces) {
+            Placeholder nextScript = i < scripts.size() ? scripts.get(i) : null;
+            if (piece.endsWith(WT_NO_PRESERVE) && nextScript != null && nextScript.text.contains(SPACE_PRESERVE)) {
+                // Preserve spaces if one of the elements inside the following script block preserves them
+                piece = piece.substring(0, piece.length() - WT_NO_PRESERVE.length()) + WT_SPACE_PRESERVE;
+            }
+
             tplSkeleton.add(new Placeholder(UUID.randomUUID().toString(), piece, PlaceholderType.TEXT));
 
-            if (i < scripts.size()) {
-                tplSkeleton.add(scripts.get(i));
+            if (nextScript != null) {
+                tplSkeleton.add(nextScript);
             }
             i++;
         }
