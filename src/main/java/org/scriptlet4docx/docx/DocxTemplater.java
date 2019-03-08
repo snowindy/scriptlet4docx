@@ -36,6 +36,7 @@ public class DocxTemplater {
     private InputStream templateStream;
     private String streamTemplateKey;
     private TemplateEngine templateEngine;
+    private boolean spacePreserve;
 
     /**
      * Set default Template Engine
@@ -110,6 +111,8 @@ public class DocxTemplater {
     }
 
     private static String NEW_LINE_PLACEHOLDER = "26f679ad-e7fd-4d42-9e05-946f393c277d";
+    private static String WT_NO_PRESERVE = "<w:t>";
+    private static String WT_SPACE_PRESERVE = "<w:t xml:space=\"preserve\">";
 
     protected static Map<String, Object> processParams(Map<String, Object> params) {
         Map<String, Object> res = new HashMap<String, Object>();
@@ -166,6 +169,11 @@ public class DocxTemplater {
 
         int i = 0;
         for (String piece : pieces) {
+            if (spacePreserve && i < scripts.size() && piece.endsWith(WT_NO_PRESERVE)) {
+                // Always preserve spaces of the following scripts
+                piece = piece.substring(0, piece.length() - WT_NO_PRESERVE.length()) + WT_SPACE_PRESERVE;
+            }
+
             tplSkeleton.add(new Placeholder(UUID.randomUUID().toString(), piece, PlaceholderType.TEXT));
 
             if (i < scripts.size()) {
@@ -396,6 +404,16 @@ public class DocxTemplater {
      */
     public void setTemplateEngine(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
+    }
+
+    /**
+     * When spaces around scripts should be preserved.
+     * Defaults to <code>false</code>
+     *
+     * @param spacePreserve Preserve spaces around scripts?
+     */
+    public void setSpacePreserve(boolean spacePreserve) {
+        this.spacePreserve = spacePreserve;
     }
 
 }
