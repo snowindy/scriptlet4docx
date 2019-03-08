@@ -36,6 +36,7 @@ public class DocxTemplater {
     private InputStream templateStream;
     private String streamTemplateKey;
     private TemplateEngine templateEngine;
+    private boolean spacePreserve;
 
     /**
      * Set default Template Engine
@@ -168,7 +169,7 @@ public class DocxTemplater {
 
         int i = 0;
         for (String piece : pieces) {
-            if (i < scripts.size() && piece.endsWith(WT_NO_PRESERVE)) {
+            if (spacePreserve && i < scripts.size() && piece.endsWith(WT_NO_PRESERVE)) {
                 // Always preserve spaces of the following scripts
                 piece = piece.substring(0, piece.length() - WT_NO_PRESERVE.length()) + WT_SPACE_PRESERVE;
             }
@@ -403,6 +404,16 @@ public class DocxTemplater {
      */
     public void setTemplateEngine(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
+    }
+
+    /**
+     * When spaces around scripts should be preserved.
+     * Defaults to <code>false</code>
+     *
+     * @param spacePreserve Preserve spaces around scripts?
+     */
+    public void setSpacePreserve(boolean spacePreserve) {
+        this.spacePreserve = spacePreserve;
     }
 
 }
